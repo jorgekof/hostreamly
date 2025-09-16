@@ -4,14 +4,14 @@ static_sites:
   github:
     repo: jorgekof/hostreamly
     branch: main
-  build_command: npm install --legacy-peer-deps && npx vite build
+  build_command: npm ci --legacy-peer-deps --include=dev && npx vite build
   output_dir: /dist
   environment_slug: node-js
   routes:
   - path: /
   envs:
   - key: NODE_ENV
-    value: production
+    value: development
   - key: VITE_API_URL
     value: https://api.hostreamly.com
   - key: NPM_CONFIG_INCLUDE
