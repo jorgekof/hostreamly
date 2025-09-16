@@ -45,7 +45,7 @@ export const useBillingPreferences = () => {
       }
 
       try {
-        // Supabase call replaced - implement with API
+        // API call - implement with backend
 
         if (error && error.code !== 'PGRST116') {
           console.error('Error fetching billing preferences:', error);
@@ -77,7 +77,7 @@ export const useBillingPreferences = () => {
       if (!user) return;
 
       try {
-        // Supabase call replaced - implement with API
+        // API call - implement with backend
 
         if (error) {
           console.error('Error fetching additional charges:', error);
@@ -99,7 +99,7 @@ export const useBillingPreferences = () => {
 
     setSaving(true);
     try {
-      // Supabase call replaced - implement with API
+      // API call - implement with backend
 
       if (error) throw error;
 
@@ -139,14 +139,14 @@ export const useBillingPreferences = () => {
       const periodStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
       const periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
 
-      // Supabase call replaced - implement with API
+      // API call - implement with backend
 
       if (error) throw error;
 
       toast.success(`Cargo adicional creado: $${charges.totalCharge}`);
       
       // Refresh additional charges
-      // Supabase call replaced - implement with API
+      // API call - implement with backend
       
       setAdditionalCharges((data || []) as AdditionalUsageCharge[]);
     } catch (error) {

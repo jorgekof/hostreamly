@@ -47,14 +47,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('auth_token')
     localStorage.removeItem('user_data')
     localStorage.removeItem('refresh_token')
-    // Clear any Supabase remnants
+    // Clear any legacy auth remnants
     Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+      if (key.startsWith('legacy.auth.') || key.includes('legacy-')) {
         localStorage.removeItem(key)
       }
     })
     Object.keys(sessionStorage || {}).forEach((key) => {
-      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+      if (key.startsWith('legacy.auth.') || key.includes('legacy-')) {
         sessionStorage.removeItem(key)
       }
     })

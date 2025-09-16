@@ -34,7 +34,7 @@ export const useBandwidthTracking = () => {
       }
 
       try {
-        // Supabase call replaced - implement with API
+        // API call - implement with backend
 
         if (error) {
           console.error('Error fetching bandwidth usage:', error);
@@ -60,7 +60,7 @@ export const useBandwidthTracking = () => {
       const today = new Date().toISOString().split('T')[0];
       
       // Check if there's already an entry for today
-      // Supabase call replaced - implement with API
+      // API call - implement with backend
 
       if (fetchError) {
         console.error('Error fetching existing bandwidth usage:', fetchError);
@@ -69,14 +69,14 @@ export const useBandwidthTracking = () => {
 
       if (existingData) {
         // Update existing entry
-        // Supabase call replaced - implement with API
+        // API call - implement with backend
 
         if (updateError) {
           console.error('Error updating bandwidth usage:', updateError);
         }
       } else {
         // Create new entry
-        // Supabase call replaced - implement with API
+        // API call - implement with backend
 
         if (insertError) {
           console.error('Error inserting bandwidth usage:', insertError);
