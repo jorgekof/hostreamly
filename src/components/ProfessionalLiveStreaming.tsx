@@ -192,10 +192,10 @@ const ProfessionalLiveStreaming: React.FC = () => {
 
   const loadChannels = async () => {
     try {
-  
-
-      if (error) throw error;
-      setChannels(data.channels || []);
+      // TODO: Implementar llamada a la API
+      // const { data, error } = await api.getChannels();
+      // if (error) throw error;
+      // setChannels(data.channels || []);
     } catch (error) {
       console.error('Error loading channels:', error);
       // Datos de ejemplo para demostración
@@ -244,10 +244,10 @@ const ProfessionalLiveStreaming: React.FC = () => {
 
   const loadAnalytics = async () => {
     try {
-
-
-      if (error) throw error;
-      setAnalytics(data.analytics);
+      // TODO: Implementar llamada a la API
+      // const { data, error } = await api.getAnalytics();
+      // if (error) throw error;
+      // setAnalytics(data.analytics);
     } catch (error) {
       console.error('Error loading analytics:', error);
       // Datos de ejemplo
@@ -284,9 +284,9 @@ const ProfessionalLiveStreaming: React.FC = () => {
 
     setIsCreatingChannel(true);
     try {
-      
-
-      if (error) throw error;
+      // TODO: Implementar llamada a la API
+      // const { data, error } = await api.createChannel({ name: newChannelName, description: newChannelDescription });
+      // if (error) throw error;
 
       toast.success('Canal creado exitosamente');
       setNewChannelName('');
@@ -302,9 +302,9 @@ const ProfessionalLiveStreaming: React.FC = () => {
 
   const startStream = async (channelId: string) => {
     try {
-      
-
-      if (error) throw error;
+      // TODO: Implementar llamada a la API
+      // const { data, error } = await api.startStream(channelId);
+      // if (error) throw error;
 
       toast.success('Stream iniciado');
       loadChannels();
@@ -316,9 +316,9 @@ const ProfessionalLiveStreaming: React.FC = () => {
 
   const stopStream = async (channelId: string) => {
     try {
-      
-
-      if (error) throw error;
+      // TODO: Implementar llamada a la API
+      // const { data, error } = await api.stopStream(channelId);
+      // if (error) throw error;
 
       toast.success('Stream detenido');
       loadChannels();
@@ -751,7 +751,7 @@ const ProfessionalLiveStreaming: React.FC = () => {
               <div className="space-y-4">
                 <Label>Precio de Suscripción Mensual</Label>
                 <div className="flex gap-2">
-                  <Input placeholder="9.99" type="number" step="0.01" />
+                  <Input placeholder="25.00" type="number" step="0.01" />
                   <Select defaultValue="usd">
                     <SelectTrigger className="w-20">
                       <SelectValue />

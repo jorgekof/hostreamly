@@ -1,0 +1,238 @@
+{
+  "pages": [
+    {
+      "path": "/",
+      "name": "Página Principal",
+      "critical": true,
+      "url": "http://localhost:3000/",
+      "statusCode": 200,
+      "loadTime": 136,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/auth",
+      "name": "Autenticación",
+      "critical": true,
+      "url": "http://localhost:3000/auth",
+      "statusCode": 200,
+      "loadTime": 37,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/dashboard",
+      "name": "Dashboard",
+      "critical": true,
+      "url": "http://localhost:3000/dashboard",
+      "statusCode": 200,
+      "loadTime": 43,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/docs",
+      "name": "Documentación",
+      "critical": false,
+      "url": "http://localhost:3000/docs",
+      "statusCode": 200,
+      "loadTime": 65,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/support",
+      "name": "Soporte",
+      "critical": false,
+      "url": "http://localhost:3000/support",
+      "statusCode": 200,
+      "loadTime": 49,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/player-demo",
+      "name": "Demo del Reproductor",
+      "critical": true,
+      "url": "http://localhost:3000/player-demo",
+      "statusCode": 200,
+      "loadTime": 65,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/terms",
+      "name": "Términos y Condiciones",
+      "critical": false,
+      "url": "http://localhost:3000/terms",
+      "statusCode": 200,
+      "loadTime": 32,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/privacy",
+      "name": "Política de Privacidad",
+      "critical": false,
+      "url": "http://localhost:3000/privacy",
+      "statusCode": 200,
+      "loadTime": 23,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/checkout",
+      "name": "Checkout/Pago",
+      "critical": true,
+      "url": "http://localhost:3000/checkout",
+      "statusCode": 200,
+      "loadTime": 39,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/pricing",
+      "name": "Precios",
+      "critical": true,
+      "url": "http://localhost:3000/pricing",
+      "statusCode": 200,
+      "loadTime": 28,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/features",
+      "name": "Características",
+      "critical": false,
+      "url": "http://localhost:3000/features",
+      "statusCode": 200,
+      "loadTime": 26,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    },
+    {
+      "path": "/integrations",
+      "name": "Integraciones",
+      "critical": false,
+      "url": "http://localhost:3000/integrations",
+      "statusCode": 200,
+      "loadTime": 30,
+      "working": true,
+      "ux": {
+        "issues": [],
+        "recommendations": [
+          "💡 Agregar atributos alt a las imágenes"
+        ]
+      }
+    }
+  ],
+  "apis": [
+    {
+      "path": "/api/health",
+      "name": "Health Check",
+      "method": "GET",
+      "url": "http://localhost:3000/api/health",
+      "statusCode": 500,
+      "responseTime": 85,
+      "working": false,
+      "validJSON": false
+    },
+    {
+      "path": "/api/videos",
+      "name": "Videos API",
+      "method": "GET",
+      "url": "http://localhost:3000/api/videos",
+      "statusCode": 500,
+      "responseTime": 12,
+      "working": false,
+      "validJSON": false
+    },
+    {
+      "path": "/api/users",
+      "name": "Users API",
+      "method": "GET",
+      "url": "http://localhost:3000/api/users",
+      "statusCode": 500,
+      "responseTime": 6,
+      "working": false,
+      "validJSON": false
+    },
+    {
+      "path": "/api/auth/status",
+      "name": "Auth Status",
+      "method": "GET",
+      "url": "http://localhost:3000/api/auth/status",
+      "statusCode": 500,
+      "responseTime": 3,
+      "working": false,
+      "validJSON": false
+    }
+  ],
+  "performance": {
+    "totalPages": 12,
+    "workingPages": 12,
+    "avgLoadTime": 48,
+    "slowPages": 0
+  },
+  "ux": {
+    "issues": [],
+    "recommendations": []
+  },
+  "security": [],
+  "accessibility": []
+}

@@ -1,0 +1,52 @@
+# DigitalOcean App Platform Configuration - Versión Simple
+# Solo Backend API Service
+name: hostreamly-backend
+
+# Backend API Service
+services:
+  - name: backend-api
+    source_dir: /backend
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    
+    run_command: "node server.js"
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    
+    # Variables de entorno del backend
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: DO_SPACES_KEY
+        value: "TU_SPACES_KEY_AQUI"
+      - key: DO_SPACES_SECRET
+        value: "TU_SPACES_SECRET_AQUI"
+      - key: DO_SPACES_BUCKET
+        value: "hostreamly-storage"
+      - key: DO_SPACES_REGION
+        value: "nyc3"
+      - key: BUNNY_API_KEY
+        value: "TU_BUNNY_API_KEY_AQUI"
+      - key: JWT_SECRET
+        value: "tu-jwt-secret-super-seguro"
+    
+    # Configuración de salud
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    
+    # Configuración HTTP
+    http_port: 8080
+    
+    routes:
+      - path: /
+        preserve_path_prefix: true

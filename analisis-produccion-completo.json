@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-09-16T20:11:41.468Z",
+  "production_url": "http://154.29.74.169:3000",
+  "api_url": "http://154.29.74.169:3001/api",
+  "pages": [
+    {
+      "path": "/",
+      "name": "Página Principal",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10004,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/auth",
+      "name": "Autenticación",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/auth",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10010,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/dashboard",
+      "name": "Dashboard",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/dashboard",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10007,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/docs",
+      "name": "Documentación",
+      "critical": false,
+      "url": "http://154.29.74.169:3000/docs",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10003,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/support",
+      "name": "Soporte",
+      "critical": false,
+      "url": "http://154.29.74.169:3000/support",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10006,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/player-demo",
+      "name": "Demo del Reproductor",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/player-demo",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10017,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/pricing",
+      "name": "Precios",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/pricing",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10013,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/checkout",
+      "name": "Checkout/Pago",
+      "critical": true,
+      "url": "http://154.29.74.169:3000/checkout",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10002,
+      "code": "TIMEOUT"
+    }
+  ],
+  "apis": [
+    {
+      "path": "/health",
+      "name": "Health Check",
+      "url": "http://154.29.74.169:3001/api/health",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10012,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/videos",
+      "name": "Videos API",
+      "url": "http://154.29.74.169:3001/api/videos",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10004,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/users",
+      "name": "Users API",
+      "url": "http://154.29.74.169:3001/api/users",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10005,
+      "code": "TIMEOUT"
+    },
+    {
+      "path": "/auth/status",
+      "name": "Auth Status",
+      "url": "http://154.29.74.169:3001/api/auth/status",
+      "success": false,
+      "error": "Request timeout",
+      "loadTime": 10013,
+      "code": "TIMEOUT"
+    }
+  ],
+  "summary": {
+    "total_score": 0,
+    "working_pages": 0,
+    "total_pages": 8,
+    "working_apis": 0,
+    "total_apis": 4,
+    "critical_pages_working": 0,
+    "total_critical_pages": 6
+  }
+}

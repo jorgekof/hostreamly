@@ -7,6 +7,18 @@ interface PerformanceResourceTiming extends PerformanceEntry {
   decodedBodySize?: number;
 }
 
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number;
+  processingEnd: number;
+  cancelable: boolean;
+}
+
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+  sources: any[];
+}
+
 interface NetworkInformation {
   effectiveType?: string;
   downlink?: number;
@@ -160,7 +172,8 @@ class PerformanceMonitoringService {
           const entries = list.getEntries();
           entries.forEach((entry: PerformanceEntry) => {
             if (entry.name === 'first-input') {
-              this.metrics.fid = entry.processingStart - entry.startTime;
+              const eventEntry = entry as PerformanceEventTiming;
+              this.metrics.fid = eventEntry.processingStart - eventEntry.startTime;
               this.checkAlert('fid', this.metrics.fid);
             }
           });
@@ -179,8 +192,9 @@ class PerformanceMonitoringService {
         const clsObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry: PerformanceEntry) => {
-            if (!entry.hadRecentInput) {
-              clsValue += entry.value;
+            const layoutEntry = entry as LayoutShiftEntry;
+            if (!layoutEntry.hadRecentInput) {
+              clsValue += layoutEntry.value;
             }
           });
           this.metrics.cls = clsValue;
@@ -304,12 +318,18 @@ class PerformanceMonitoringService {
   private trackReactRenderTime(): void {
     if ('performance' in window && 'mark' in performance) {
       // Hook into React DevTools if available
-      if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-        const hook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-        hook.onCommitFiberRoot = (id: number, root: unknown, priorityLevel: number) => {
-          const renderTime = performance.now();
-          this.addCustomMetric('react_render_time', renderTime);
-        };
+      try {
+        if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__ && typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+          const hook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+          if (hook && typeof hook === 'object') {
+            hook.onCommitFiberRoot = (id: number, root: unknown, priorityLevel: number) => {
+              const renderTime = performance.now();
+              this.addCustomMetric('react_render_time', renderTime);
+            };
+          }
+        }
+      } catch (error) {
+        console.warn('Error setting up React DevTools hook:', error);
       }
     }
   }

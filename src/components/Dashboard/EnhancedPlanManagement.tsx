@@ -173,8 +173,8 @@ const EnhancedPlanManagement: React.FC = () => {
       category: 'basic',
       position: 1,
       pricing: [
-        { id: '1', name: 'Mensual', price: 9.99, currency: 'EUR', interval: 'monthly' },
-        { id: '2', name: 'Anual', price: 99.99, currency: 'EUR', interval: 'yearly', discount: 17 },
+        { id: '1', name: 'Mensual', price: 25.00, currency: 'USD', interval: 'monthly' },
+        { id: '2', name: 'Anual', price: 250.00, currency: 'USD', interval: 'yearly', discount: 17 },
       ],
       features: [
         { id: '1', name: 'Streaming HD', description: 'Calidad hasta 1080p', category: 'streaming', type: 'boolean', value: true },
@@ -208,8 +208,8 @@ const EnhancedPlanManagement: React.FC = () => {
       category: 'premium',
       position: 2,
       pricing: [
-        { id: '3', name: 'Mensual', price: 29.99, currency: 'EUR', interval: 'monthly' },
-        { id: '4', name: 'Anual', price: 299.99, currency: 'EUR', interval: 'yearly', discount: 17 },
+        { id: '3', name: 'Mensual', price: 219.00, currency: 'USD', interval: 'monthly' },
+        { id: '4', name: 'Anual', price: 2190.00, currency: 'USD', interval: 'yearly', discount: 17 },
       ],
       features: [
         { id: '5', name: 'Streaming 4K', description: 'Calidad hasta 4K', category: 'streaming', type: 'boolean', value: true },
@@ -245,8 +245,8 @@ const EnhancedPlanManagement: React.FC = () => {
       category: 'enterprise',
       position: 3,
       pricing: [
-        { id: '5', name: 'Mensual', price: 99.99, currency: 'EUR', interval: 'monthly' },
-        { id: '6', name: 'Anual', price: 999.99, currency: 'EUR', interval: 'yearly', discount: 17 },
+        { id: '5', name: 'Mensual', price: 999.00, currency: 'USD', interval: 'monthly' },
+        { id: '6', name: 'Anual', price: 9990.00, currency: 'USD', interval: 'yearly', discount: 17 },
       ],
       features: [
         { id: '10', name: 'Streaming ilimitado', description: 'Sin límites de calidad', category: 'streaming', type: 'boolean', value: true },
@@ -703,12 +703,12 @@ const EnhancedPlanManagement: React.FC = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="monthlyPrice">Precio Mensual (€)</Label>
-                    <Input id="monthlyPrice" type="number" step="0.01" placeholder="29.99" />
+                    <Label htmlFor="monthlyPrice">Precio Mensual ($)</Label>
+                    <Input id="monthlyPrice" type="number" step="0.01" placeholder="219.00" />
                   </div>
                   <div>
-                    <Label htmlFor="yearlyPrice">Precio Anual (€)</Label>
-                    <Input id="yearlyPrice" type="number" step="0.01" placeholder="299.99" />
+                    <Label htmlFor="yearlyPrice">Precio Anual ($)</Label>
+                    <Input id="yearlyPrice" type="number" step="0.01" placeholder="2190.00" />
                   </div>
                 </div>
                 

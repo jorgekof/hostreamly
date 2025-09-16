@@ -157,7 +157,7 @@ const AdvancedMonetization: React.FC = () => {
   const [newSubscription, setNewSubscription] = useState({
     name: '',
     description: '',
-    price: 9.99,
+    price: 25.00,
     billing_cycle: 'monthly' as 'monthly' | 'yearly',
     features: [''],
     video_access_level: 'basic' as 'basic' | 'premium' | 'all',
@@ -219,7 +219,7 @@ const AdvancedMonetization: React.FC = () => {
           id: plan.id,
           name: plan.plan_name,
           description: `Plan ${plan.plan_name}`,
-          price: 9.99,
+          price: 25.00,
           billing_cycle: 'monthly' as const,
           features: [],
           video_access_level: 'basic' as const,
@@ -349,7 +349,7 @@ const AdvancedMonetization: React.FC = () => {
       setNewSubscription({
         name: '',
         description: '',
-        price: 9.99,
+        price: 25.00,
         billing_cycle: 'monthly',
         features: [''],
         video_access_level: 'basic',

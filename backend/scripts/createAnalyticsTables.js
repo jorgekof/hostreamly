@@ -148,9 +148,9 @@ async function createAnalyticsTables() {
     await sequelize.query(`
       INSERT IGNORE INTO subscription_plans (id, name, storage_limit_bytes, bandwidth_limit_bytes, video_limit, price_monthly, features) VALUES
       ('free-plan', 'Free', 1073741824, 10737418240, 10, 0.00, JSON_OBJECT('drm', false, 'analytics', 'basic', 'support', 'community')),
-      ('starter-plan', 'Starter', 10737418240, 107374182400, 100, 9.99, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'email')),
-      ('pro-plan', 'Professional', 107374182400, 1073741824000, 1000, 29.99, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'priority')),
-      ('enterprise-plan', 'Enterprise', 1099511627776, 10995116277760, 10000, 99.99, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'dedicated'))
+      ('starter-plan', 'Starter', 10737418240, 107374182400, 100, 25.00, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'email')),
+      ('pro-plan', 'Professional', 107374182400, 1073741824000, 1000, 219.00, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'priority')),
+      ('enterprise-plan', 'Enterprise', 1099511627776, 10995116277760, 10000, 999.00, JSON_OBJECT('drm', true, 'analytics', 'advanced', 'support', 'dedicated'))
     `);
     console.log('✓ Default subscription plans inserted');
     

@@ -1,5 +1,7 @@
 import React from "react";
 import { Shield, Globe, Zap, Users, Award, TrendingUp } from "lucide-react";
+import videoStreamingImg from "@/assets/video-streaming.svg";
+import streamingNetworkImg from "@/assets/streaming-network.svg";
 
 const Hero = () => {
   return (
@@ -38,7 +40,7 @@ const Hero = () => {
            {/* Visual Banner */}
            <div className="mb-16 rounded-2xl bg-slate-50 border border-slate-200 overflow-hidden">
              <img 
-               src="/src/assets/video-streaming.svg" 
+               src={videoStreamingImg} 
                alt="Plataforma de Video Streaming" 
                className="w-full h-64 object-contain"
              />
@@ -140,7 +142,7 @@ const Hero = () => {
                <div className="relative">
                  <div className="w-full h-80 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm overflow-hidden">
                    <img 
-                     src="/src/assets/streaming-network.svg" 
+                     src={streamingNetworkImg} 
                      alt="Red Global de Streaming" 
                      className="w-full h-full object-contain"
                    />

@@ -1,0 +1,119 @@
+# DigitalOcean App Platform Configuration - Migración desde Droplet
+# Configuración optimizada para Hostreamly
+name: hostreamly-migration
+
+# Frontend como Static Site
+static_sites:
+  - name: hostreamly-frontend
+    source_dir: /
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    build_command: |
+      npm ci --production=false
+      npm run build
+    environment_slug: node-js
+    output_dir: /dist
+    
+    # Variables de entorno para el build
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: BUILD_TIME
+      - key: VITE_NODE_ENV
+        value: "production"
+        scope: BUILD_TIME
+      - key: VITE_DEBUG_MODE
+        value: "false"
+        scope: BUILD_TIME
+      - key: VITE_API_URL
+        value: "${backend-api.PUBLIC_URL}"
+        scope: BUILD_TIME
+    
+    # Configuración de rutas SPA
+    routes:
+      - path: /
+        preserve_path_prefix: false
+    
+    catchall_document: index.html
+
+# Backend API Service
+services:
+  - name: backend-api
+    source_dir: /backend
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    
+    run_command: "node server.js"
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    
+    # Variables de entorno del backend
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: DATABASE_URL
+        value: "${db.DATABASE_URL}"
+      - key: REDIS_URL
+        value: "${redis.REDIS_URL}"
+      - key: DO_SPACES_KEY
+        value: "TU_SPACES_KEY_AQUI"
+      - key: DO_SPACES_SECRET
+        value: "TU_SPACES_SECRET_AQUI"
+      - key: DO_SPACES_BUCKET
+        value: "hostreamly-storage"
+      - key: DO_SPACES_REGION
+        value: "nyc3"
+      - key: BUNNY_API_KEY
+        value: "TU_BUNNY_API_KEY_AQUI"
+      - key: JWT_SECRET
+        value: "tu-jwt-secret-super-seguro"
+    
+    # Configuración de salud
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    
+    # Configuración HTTP
+    http_port: 8080
+    
+    routes:
+      - path: /api
+        preserve_path_prefix: true
+
+# Base de datos PostgreSQL administrada
+databases:
+  - name: db
+    engine: PG
+    version: "15"
+    size: db-s-1vcpu-1gb
+    num_nodes: 1
+    production: true
+    cluster_name: hostreamly-postgres-cluster
+
+  - name: redis
+    engine: REDIS
+    name: hostreamly-redis
+    version: "7"
+    size: db-s-1vcpu-1gb
+    num_nodes: 1
+    production: true
+    cluster_name: hostreamly-redis-cluster
+
+# Configuración de dominio (opcional)
+# domains:
+#   - domain: tu-dominio.com
+#     type: PRIMARY
+#   - domain: www.tu-dominio.com
+#     type: ALIAS
+#     minimum_tls_version: "1.2"

@@ -1,0 +1,17 @@
+# Netlify redirects for SPA
+/*    /index.html   200
+
+# API routes should not be redirected
+/api/*  /api/:splat  200
+
+# Health check
+/health  /health  200
+
+# Static assets
+/assets/*  /assets/:splat  200
+/js/*  /js/:splat  200
+/css/*  /css/:splat  200
+/images/*  /images/:splat  200
+
+# Fallback for all other routes to index.html for SPA
+/*    /index.html   200

@@ -3,15 +3,19 @@ name: hostreamly-platform
 services:
   # Backend API Service
   - name: backend-api
-    github:
-      repo: TU_USUARIO/hostreamly
-      branch: main
     source_dir: /backend
     run_command: npm start
     environment_slug: node-js
     instance_count: 1
     instance_size_slug: basic-xxs
     http_port: 8080
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      failure_threshold: 3
+      success_threshold: 1
     
     # Environment Variables for Backend
     envs:
@@ -82,20 +86,24 @@ databases:
 
 # Static Sites Configuration
 static_sites:
-  - name: frontend
-    github:
-      repo: TU_USUARIO/hostreamly
-      branch: main
+  - name: hostreamly-frontend
+    source_dir: /
     source_dir: /
     build_command: npm run build
-    output_dir: /dist
-    
-    # Environment Variables for Frontend
+    environment_slug: node-js
     envs:
+      - key: NODE_ENV
+        value: production
       - key: VITE_API_BASE_URL
-        value: "${backend-api.PUBLIC_URL}"
+        value: ${APP_URL}/api
       - key: VITE_WEBSOCKET_URL
-        value: "wss://${backend-api.PUBLIC_URL}"
+        value: ${APP_URL}
+      - key: VITE_APP_BASE_URL
+        value: ${APP_URL}
+      - key: VITE_BUNNY_CDN_URL
+        value: https://hostreamly.b-cdn.net
+      - key: VITE_DO_SPACES_URL
+        value: https://hostreamly.fra1.digitaloceanspaces.com
       - key: VITE_BUNNY_STREAM_API_KEY
         type: SECRET
         value: "REEMPLAZAR_CON_TU_BUNNY_API_KEY"
@@ -117,6 +125,11 @@ static_sites:
     routes:
       - path: /
         preserve_path_prefix: false
+    
+    # Configuración de rutas para SPA
+    catchall_document: index.html
+    
+    # Headers de seguridad - configurar en el servidor web
 
 # Domain configuration (optional)
 # domains:

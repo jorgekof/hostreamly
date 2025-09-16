@@ -1,13 +1,42 @@
-import { Play, Twitter, Github, Linkedin, Mail, ArrowUp, Zap, Globe, Shield, BarChart3, Sparkles, ArrowRight, Heart } from "lucide-react";
+import { Play, Twitter, Github, Linkedin, Mail, ArrowUp, Zap, Globe, Shield, BarChart3, Sparkles, ArrowRight, Heart, Phone, MapPin } from "lucide-react";
+import { Button } from '@/components/ui/button';
 
 const Footer = () => {
-  const footerSections = [];
+  const footerSections = [
+    {
+      title: 'Producto',
+      links: [
+        { name: 'Características', href: '#features' },
+        { name: 'Precios', href: '#pricing' },
+        { name: 'API', href: '/api' },
+        { name: 'Documentación', href: '/docs' }
+      ]
+    },
+    {
+      title: 'Empresa',
+      links: [
+        { name: 'Acerca de', href: '/about' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'Carreras', href: '/careers' },
+        { name: 'Contacto', href: '/contact' }
+      ]
+    },
+    {
+      title: 'Soporte',
+      links: [
+        { name: 'Centro de Ayuda', href: '/help' },
+        { name: 'Estado del Sistema', href: '/status' },
+        { name: 'Comunidad', href: '/community' },
+        { name: 'Seguridad', href: '/security' }
+      ]
+    }
+  ];
 
   const socialLinks = [
-    { icon: <Twitter className="w-5 h-5" />, href: "#", color: "brand-primary" },
-    { icon: <Github className="w-5 h-5" />, href: "#", color: "brand-secondary" },
-    { icon: <Linkedin className="w-5 h-5" />, href: "#", color: "brand-accent" },
-    { icon: <Mail className="w-5 h-5" />, href: "#", color: "brand-primary" }
+    { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/hostreamly", color: "brand-primary", label: "Twitter" },
+    { icon: <Github className="w-5 h-5" />, href: "https://github.com/hostreamly", color: "brand-secondary", label: "GitHub" },
+    { icon: <Linkedin className="w-5 h-5" />, href: "https://linkedin.com/company/hostreamly", color: "brand-accent", label: "LinkedIn" },
+    { icon: <Mail className="w-5 h-5" />, href: "mailto:contacto@hostreamly.com", color: "brand-primary", label: "Email" }
   ];
 
   const scrollToTop = () => {

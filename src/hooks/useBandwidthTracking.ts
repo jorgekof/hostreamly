@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { apiClient as api } from '@/lib/api';
+import { apiClient } from '@/lib/api';
 export interface BandwidthUsage {
   date: string;
   bytes_transferred: number;
@@ -34,14 +34,13 @@ export const useBandwidthTracking = () => {
       }
 
       try {
-        // API call - implement with backend
+        // API call to fetch bandwidth usage
+        const response = await apiClient.analytics.getBandwidthUsage();
+        const data = response.data;
 
-        if (error) {
-          console.error('Error fetching bandwidth usage:', error);
-          return;
+        if (data) {
+          setUsage(data);
         }
-
-        setUsage(data || []);
       } catch (error) {
         console.error('Error in fetchBandwidthUsage:', error);
       } finally {
@@ -57,34 +56,35 @@ export const useBandwidthTracking = () => {
     if (!user) return;
 
     try {
-      const today = new Date().toISOString().split('T')[0];
-      
-      // Check if there's already an entry for today
-      // API call - implement with backend
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Check if there's already an entry for today
+        try {
+          const fetchResponse = await apiClient.analytics.getBandwidthUsageByDate(today);
+          const existingData = fetchResponse.data;
 
-      if (fetchError) {
-        console.error('Error fetching existing bandwidth usage:', fetchError);
-        return;
-      }
-
-      if (existingData) {
-        // Update existing entry
-        // API call - implement with backend
-
-        if (updateError) {
-          console.error('Error updating bandwidth usage:', updateError);
+          if (existingData) {
+            // Update existing entry
+            await apiClient.analytics.updateBandwidthUsage(today, {
+              bytes_transferred: existingData.bytes_transferred + bytesTransferred
+            });
+          } else {
+            // Create new entry
+            await apiClient.analytics.createBandwidthUsage({
+              date: today,
+              bytes_transferred: bytesTransferred
+            });
+          }
+        } catch (fetchError) {
+          // If no existing entry found, create new one
+          await apiClient.analytics.createBandwidthUsage({
+            date: today,
+            bytes_transferred: bytesTransferred
+          });
         }
-      } else {
-        // Create new entry
-        // API call - implement with backend
-
-        if (insertError) {
-          console.error('Error inserting bandwidth usage:', insertError);
-        }
+      } catch (error) {
+        console.error('Error in trackBandwidthUsage:', error);
       }
-    } catch (error) {
-      console.error('Error in trackBandwidthUsage:', error);
-    }
   };
 
   const getTotalBandwidthGB = () => {

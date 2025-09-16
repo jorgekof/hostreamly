@@ -82,6 +82,12 @@ interface BillingData {
   planId?: string;
   paymentMethod?: Record<string, unknown>;
   billingAddress?: Record<string, unknown>;
+  // Billing preferences
+  id?: string;
+  auto_charge_enabled?: boolean;
+  storage_overage_price?: number;
+  bandwidth_overage_price?: number;
+  notification_threshold?: number;
 }
 
 // API Configuration
@@ -216,6 +222,12 @@ export const apiClient = {
       api.get(`/api/analytics/streams/${streamId}`, { params: { timeframe } }),
     getBandwidthUsage: (timeframe?: string) => 
       api.get('/api/analytics/bandwidth', { params: { timeframe } }),
+    getBandwidthUsageByDate: (date: string) => 
+      api.get(`/api/analytics/bandwidth/${date}`),
+    createBandwidthUsage: (data: { date: string; bytes_transferred: number }) => 
+      api.post('/api/analytics/bandwidth', data),
+    updateBandwidthUsage: (date: string, data: { bytes_transferred: number }) => 
+      api.put(`/api/analytics/bandwidth/${date}`, data),
     getStorageUsage: () => 
       api.get('/api/analytics/storage'),
   },

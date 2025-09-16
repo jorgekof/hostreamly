@@ -16,7 +16,7 @@ const CheckoutPage = () => {
   const plans = {
     starter: {
       name: "Starter",
-      price: "$25",
+      price: 25,
       period: "/mes",
       storage: "100 GB",
       bandwidth: "1 TB",
@@ -39,7 +39,7 @@ const CheckoutPage = () => {
     },
     professional: {
       name: "Professional",
-      price: "$219",
+      price: 219,
       period: "/mes",
       storage: "1 TB",
       bandwidth: "10 TB",
@@ -65,7 +65,7 @@ const CheckoutPage = () => {
     },
     enterprise: {
       name: "Enterprise",
-      price: "$999",
+      price: 999,
       period: "/mes",
       storage: "3.5 TB",
       bandwidth: "35 TB",

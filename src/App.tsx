@@ -1,6 +1,9 @@
-import { Routes, Route } from "react-router-dom"
-import { useEffect } from "react"
-import Index from "./pages/Index"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/contexts/AuthContext";
+import Navigation from "@/components/Navigation";
+import Index from "./pages/Index";
 import DashboardPage from "./pages/DashboardPage"
 import NotFound from "./pages/NotFound"
 import PlayerDemo from "./pages/PlayerDemo"
@@ -19,36 +22,48 @@ import CDNGuide from "./pages/guides/CDNGuide"
 import UsageMonitor from "./components/UsageMonitor"
 import VideoEditor from "./components/VideoEditor/VideoEditor"
 import { ProtectedRoute } from "./components/ProtectedRoute"
-import Header from "./components/Header"
-import { performanceMonitoring } from "./services/performanceMonitoring"
+import { useEffect } from "react";
 import "./App.css"
+
+// CSS polyfill for older browsers
+if (typeof window !== 'undefined' && !window.CSS?.supports?.('color', 'oklch(0.5 0.2 180)')) {
+  import('@/lib/css-polyfill').then(({ initCSSPolyfill }) => {
+    initCSSPolyfill();
+  });
+}
+
+const queryClient = new QueryClient();
 
 function App() {
   useEffect(() => {
-    // Inicializar el monitoreo de rendimiento
-    performanceMonitoring.initialize({
-      enableCoreWebVitals: true,
-      enableResourceTiming: true,
-      enableNavigationTiming: true,
-      enableCustomMetrics: true,
-      enableUserContext: true,
-      sampleRate: 1.0, // 100% de muestreo en desarrollo
-      endpoint: '/api/performance-metrics',
-      batchSize: 10,
-      flushInterval: 30000, // 30 segundos
-    });
+    // Initialize CSS polyfill for older browsers
+    if (typeof window !== 'undefined' && !window.CSS?.supports?.('color', 'oklch(0.5 0.2 180)')) {
+      import('@/lib/css-polyfill').then(({ initCSSPolyfill }) => {
+        initCSSPolyfill();
+      });
+    }
 
-    // Limpiar al desmontar
+    // Initialize debug helpers in development
+    if (import.meta.env.DEV) {
+      import('@/lib/debug').then(({ initDebugHelpers }) => {
+        initDebugHelpers();
+      });
+    }
+
+    // Cleanup function
     return () => {
-      performanceMonitoring.cleanup();
+      // Cleanup any global event listeners or intervals here
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-20">
-        <Routes>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
+          <Navigation />
+          <div className="min-h-screen bg-background">
+            <main className="pt-20">
+              <Routes>
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/" element={<Index />} />
       <Route path="/dashboard" element={
@@ -79,10 +94,14 @@ function App() {
           <Route path="/docs/security" element={<SecurityGuide />} />
           <Route path="/docs/cdn" element={<CDNGuide />} />
       <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </div>
-  )
+              </Routes>
+            </main>
+          </div>
+          <Toaster />
+        </Router>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App

@@ -1,24 +1,25 @@
+# DigitalOcean App Platform Configuration for Hostreamly - Static Only
 name: hostreamly-static
+
+# Static Sites Configuration
 static_sites:
-- name: hostreamly-frontend
-  github:
-    repo: jorgekof/hostreamly
-    branch: main
-  build_command: npm install --legacy-peer-deps && npm run build
-  output_dir: /dist
-  environment_slug: node-js
-  routes:
-  - path: /
-  envs:
-  - key: NODE_ENV
-    value: development
-  - key: VITE_API_URL
-    value: https://api.hostreamly.com
-  - key: NPM_CONFIG_INCLUDE
-    value: dev
-databases:
-- engine: PG
-  name: hostreamly-db
-  num_nodes: 1
-  size: db-s-dev-database
-  version: "15"
+  - name: hostreamly-app
+    source_dir: /
+    build_command: |
+      npm install
+      npm run build
+    environment_slug: node-js
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_NODE_ENV
+        value: "production"
+      - key: VITE_DEBUG_MODE
+        value: "false"
+    
+    routes:
+      - path: /
+        preserve_path_prefix: false
+    
+    # Configuración de rutas para SPA
+    catchall_document: index.html

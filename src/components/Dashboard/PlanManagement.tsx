@@ -87,7 +87,7 @@ export const PlanManagement = () => {
     {
       id: '1',
       name: 'Starter',
-      price: 29,
+      price: 25,
       period: 'monthly',
       description: 'Perfect para comenzar con hosting de videos',
       storage: 100,
@@ -823,15 +823,15 @@ export const PlanManagement = () => {
 
 const PLAN_PRICES = {
   free: 0,
-  starter: 29,
-  professional: 99,
-  enterprise: 599 // Precio ajustado para sostenibilidad
+  starter: 25,
+  professional: 219,
+  enterprise: 999
 };
 
 const PLAN_FEATURES = {
   enterprise: {
     name: "Enterprise",
-    price: 599,
+    price: 999,
     features: [
       "1 TB de almacenamiento (sostenible)",
       "10 TB de transferencia mensual (optimizado)", 

@@ -1,5 +1,5 @@
 import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -8,8 +8,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+// Simple theme hook replacement
+function useSimpleTheme() {
+  const [theme, setThemeState] = useState<string>('light')
+
+  const setTheme = (newTheme: string) => {
+    setThemeState(newTheme)
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('theme', newTheme)
+  }
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light'
+    setTheme(savedTheme)
+  }, [])
+
+  return { theme, setTheme }
+}
+
 export function ThemeToggle() {
-  const { setTheme } = useTheme()
+  const { setTheme } = useSimpleTheme()
 
   return (
     <DropdownMenu>
@@ -36,7 +58,7 @@ export function ThemeToggle() {
 }
 
 export function ThemeToggleSimple() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useSimpleTheme()
 
   return (
     <Button

@@ -6,8 +6,9 @@ const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
 const { Video, User } = require('../models');
-const { authMiddleware: auth, requirePremium } = require('../middleware/auth');
+const { authMiddleware: auth, requirePremium, validateInput, enhancedRateLimit } = require('../middleware/auth');
 const bunnyService = require('../services/BunnyService');
+const videoCacheService = require('../services/videoCacheService');
 const { cache } = require('../config/redis');
 const logger = require('../utils/logger');
 const { AppError, ValidationError, NotFoundError } = require('../middleware/errorHandler');
@@ -374,7 +375,20 @@ router.post('/upload',
  * @desc    Get videos with filtering and pagination
  * @access  Public
  */
-router.get('/', validateSearch, handleValidationErrors, async (req, res, next) => {
+router.get('/', 
+  enhancedRateLimit({ type: 'video_list', maxRequests: 60, windowMs: 60 * 1000 }),
+  validateInput({
+    q: { required: false, type: 'string', maxLength: 255 },
+    category: { required: false, type: 'string' },
+    duration: { required: false, type: 'string' },
+    sort: { required: false, type: 'string' },
+    page: { required: false, type: 'number', min: 1 },
+    limit: { required: false, type: 'number', min: 1, max: 50 },
+    user_id: { required: false, type: 'string' }
+  }),
+  validateSearch, 
+  handleValidationErrors, 
+  async (req, res, next) => {
   try {
     const {
       q,
@@ -387,15 +401,25 @@ router.get('/', validateSearch, handleValidationErrors, async (req, res, next) =
     } = req.query;
     
     const offset = (page - 1) * limit;
-    const cacheKey = `videos:${JSON.stringify(req.query)}`;
     
-    // Try to get from cache first
-    const cached = await cache.get(cacheKey);
-    if (cached) {
+    // Use cache service for public videos
+    if (!q && !user_id) {
+      const orderBy = sort === 'newest' ? 'created_at' : sort === 'popular' ? 'view_count' : 'created_at';
+      const orderDir = sort === 'oldest' ? 'ASC' : 'DESC';
+      
+      const result = await videoCacheService.getPublicVideos(parseInt(limit), parseInt(offset), orderBy, orderDir);
+      
       return res.json({
         success: true,
-        data: cached,
-        cached: true
+        data: {
+          videos: result.rows,
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total: result.count,
+            pages: Math.ceil(result.count / limit)
+          }
+        }
       });
     }
     
@@ -502,7 +526,20 @@ router.get('/', validateSearch, handleValidationErrors, async (req, res, next) =
  * @desc    Search videos
  * @access  Public
  */
-router.get('/search', searchLimiter, validateSearch, handleValidationErrors, async (req, res, next) => {
+router.get('/search', 
+  enhancedRateLimit({ type: 'video_search', maxRequests: 30, windowMs: 60 * 1000 }),
+  validateInput({
+    q: { required: true, type: 'string', maxLength: 255 },
+    category: { required: false, type: 'string' },
+    duration: { required: false, type: 'string' },
+    sort: { required: false, type: 'string' },
+    page: { required: false, type: 'number', min: 1 },
+    limit: { required: false, type: 'number', min: 1, max: 50 }
+  }),
+  searchLimiter, 
+  validateSearch, 
+  handleValidationErrors, 
+  async (req, res, next) => {
   try {
     const {
       q,
@@ -518,7 +555,7 @@ router.get('/search', searchLimiter, validateSearch, handleValidationErrors, asy
     }
     
     const offset = (page - 1) * limit;
-    const result = await Video.searchVideos(q, parseInt(limit), parseInt(offset));
+    const result = await videoCacheService.searchVideos(q, parseInt(limit), parseInt(offset));
     
     res.json({
       success: true,
@@ -648,13 +685,18 @@ router.get('/my-videos', auth, async (req, res, next) => {
  * @desc    Get video by ID or slug
  * @access  Public
  */
-router.get('/:identifier', async (req, res, next) => {
+router.get('/:identifier', 
+  enhancedRateLimit({ type: 'video_view', maxRequests: 100, windowMs: 60 * 1000 }),
+  validateInput({
+    identifier: { required: true, type: 'string', maxLength: 255 }
+  }),
+  async (req, res, next) => {
   try {
     const { identifier } = req.params;
     const { password } = req.query;
     
-    // Try to find by slug first, then by ID
-    let video = await Video.findBySlug(identifier);
+    // Try to find by slug first using cache service
+    let video = await videoCacheService.getVideoBySlug(identifier);
     if (!video) {
       video = await Video.findByPk(identifier, {
         include: [{
@@ -685,6 +727,14 @@ router.get('/:identifier', async (req, res, next) => {
     // Increment view count (async, don't wait)
     video.incrementViews().catch(error => {
       logger.error('Failed to increment video views', {
+        videoId: video.id,
+        error: error.message
+      });
+    });
+    
+    // Invalidate cache after view increment
+    videoCacheService.invalidateVideoCache(video.id).catch(error => {
+      logger.error('Failed to invalidate video cache', {
         videoId: video.id,
         error: error.message
       });

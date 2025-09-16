@@ -171,7 +171,7 @@ export const BillingManagement = () => {
         userEmail: 'juan@example.com',
         userName: 'Juan Pérez',
         planName: 'Plan Professional',
-        amount: 29.99,
+        amount: 25.00,
         tax: 5.40,
         discount: 0,
         totalAmount: 35.39,
@@ -186,8 +186,8 @@ export const BillingManagement = () => {
             id: '1',
             description: 'Plan Professional - Mensual',
             quantity: 1,
-            unitPrice: 29.99,
-            totalPrice: 29.99
+            unitPrice: 25.00,
+        totalPrice: 25.00
           }
         ],
         paymentMethod: 'Visa ****1234',
@@ -200,7 +200,7 @@ export const BillingManagement = () => {
         userEmail: 'ana@example.com',
         userName: 'Ana García',
         planName: 'Plan Enterprise',
-        amount: 99.99,
+        amount: 219.00,
         tax: 18.00,
         discount: 10.00,
         totalAmount: 107.99,
@@ -214,8 +214,8 @@ export const BillingManagement = () => {
             id: '1',
             description: 'Plan Enterprise - Mensual',
             quantity: 1,
-            unitPrice: 99.99,
-            totalPrice: 99.99
+            unitPrice: 219.00,
+        totalPrice: 219.00
           }
         ]
       },
@@ -226,7 +226,7 @@ export const BillingManagement = () => {
         userEmail: 'carlos@example.com',
         userName: 'Carlos López',
         planName: 'Plan Starter',
-        amount: 9.99,
+        amount: 25.00,
         tax: 1.80,
         discount: 0,
         totalAmount: 11.79,
@@ -240,8 +240,8 @@ export const BillingManagement = () => {
             id: '1',
             description: 'Plan Starter - Mensual',
             quantity: 1,
-            unitPrice: 9.99,
-            totalPrice: 9.99
+            unitPrice: 25.00,
+        totalPrice: 25.00
           }
         ]
       }

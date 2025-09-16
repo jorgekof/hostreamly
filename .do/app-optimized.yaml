@@ -1,0 +1,187 @@
+# DigitalOcean App Platform Configuration for Hostreamly - Optimized
+name: hostreamly
+
+# Static Sites Configuration
+static_sites:
+  - name: hostreamly-frontend
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+    source_dir: /
+    build_command: |
+      npm ci --production=false
+      npm run build
+    environment_slug: node-js
+    output_dir: /dist
+    
+    # Environment Variables for Build
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: BUILD_TIME
+      - key: VITE_NODE_ENV
+        value: "production"
+        scope: BUILD_TIME
+      - key: VITE_DEBUG_MODE
+        value: "false"
+        scope: BUILD_TIME
+      - key: VITE_API_URL
+        value: https://hostreamly-backend-api-do-user-19513421-0.b.db.ondigitalocean.com
+        scope: BUILD_TIME
+    
+    # Route configuration
+    routes:
+      - path: /
+        preserve_path_prefix: false
+    
+    # SPA configuration
+    catchall_document: index.html
+    
+    # Headers for security and performance
+    headers:
+      - pattern: "**/*"
+        headers:
+          - name: X-Frame-Options
+            value: DENY
+          - name: X-Content-Type-Options
+            value: nosniff
+          - name: X-XSS-Protection
+            value: "1; mode=block"
+          - name: Referrer-Policy
+            value: strict-origin-when-cross-origin
+      - pattern: "**/*.{js,css,png,jpg,jpeg,gif,ico,svg,woff,woff2}"
+        headers:
+          - name: Cache-Control
+            value: "public, max-age=31536000, immutable"
+
+# Services Configuration
+services:
+  # Backend API Service
+  - name: backend-api
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+    source_dir: /backend
+    run_command: npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    http_port: 8080
+    
+    # Health check configuration
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      failure_threshold: 3
+      success_threshold: 1
+    
+    # Environment Variables for Backend
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: JWT_SECRET
+        type: SECRET
+        value: "JWT_H0str34mly_Sup3r_S3cr3t_K3y_Pr0d_2024_V3ry_L0ng_4nd_S3cur3"
+      - key: DATABASE_URL
+        type: SECRET
+        value: "${hostreamly-db.DATABASE_URL}"
+      - key: CORS_ORIGIN
+        value: "https://hostreamly-frontend-do-user-19513421-0.b.db.ondigitalocean.com"
+      
+      # DigitalOcean Spaces Configuration
+      - key: DO_SPACES_KEY
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_ACCESS_KEY"
+      - key: DO_SPACES_SECRET
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_SECRET_KEY"
+      - key: DO_SPACES_BUCKET
+        value: "hostreamly-storage"
+      - key: DO_SPACES_REGION
+        value: "nyc3"
+      - key: DO_SPACES_ENDPOINT
+        value: "https://nyc3.digitaloceanspaces.com"
+      
+      # Bunny.net Configuration
+      - key: BUNNY_API_KEY
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_BUNNY_API_KEY"
+      - key: BUNNY_STREAM_LIBRARY_ID
+        value: "REEMPLAZAR_CON_TU_LIBRARY_ID"
+      - key: BUNNY_STORAGE_ZONE
+        value: "REEMPLAZAR_CON_TU_STORAGE_ZONE"
+      - key: BUNNY_STORAGE_PASSWORD
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_BUNNY_PASSWORD"
+      
+      # Redis Configuration
+      - key: REDIS_URL
+        type: SECRET
+        value: "${hostreamly-redis.REDIS_URL}"
+      
+      # Email Configuration
+      - key: SMTP_HOST
+        value: "smtp.gmail.com"
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_EMAIL"
+      - key: SMTP_PASS
+        type: SECRET
+        value: "REEMPLAZAR_CON_TU_PASSWORD"
+
+# Database configuration
+databases:
+  - engine: PG
+    name: hostreamly-db
+    version: "15"
+    size: basic
+    num_nodes: 1
+
+# Redis configuration
+databases:
+  - engine: REDIS
+    name: hostreamly-redis
+    version: "7"
+    size: basic
+    num_nodes: 1
+
+# Features
+features:
+  - buildpack-stack=ubuntu-22
+
+# Region
+region: nyc
+
+# Ingress rules
+ingress:
+  rules:
+    - component:
+        name: hostreamly-frontend
+      match:
+        path:
+          prefix: /
+    - component:
+        name: backend-api
+      match:
+        path:
+          prefix: /api
+      cors:
+        allow_origins:
+          - exact: https://hostreamly-frontend-do-user-19513421-0.b.db.ondigitalocean.com
+        allow_methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allow_headers:
+          - Content-Type
+          - Authorization
+          - X-Requested-With
+        max_age: 86400

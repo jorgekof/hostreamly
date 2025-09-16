@@ -1,0 +1,48 @@
+# DigitalOcean App Platform Configuration for Hostreamly - Local Files
+name: hostreamly
+
+# Static Sites Configuration using local server files
+static_sites:
+  - name: hostreamly-frontend
+    # Remove GitHub source and use local files
+    source_dir: /var/www/hostreamly
+    # No build command needed since files are pre-built
+    environment_slug: node-js
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: BUILD_TIME
+      - key: VITE_API_URL
+        value: https://api.hostreamly.com
+        scope: BUILD_TIME
+    
+    # Route configuration
+    routes:
+      - path: /
+        preserve_path_prefix: false
+    
+    # SPA configuration
+    catchall_document: index.html
+    output_dir: /
+
+# Database configuration (keep existing)
+databases:
+  - engine: PG
+    name: hostreamly-db
+    version: "15"
+
+# Features
+features:
+  - buildpack-stack=ubuntu-22
+
+# Region
+region: nyc
+
+# Ingress rules
+ingress:
+  rules:
+    - component:
+        name: hostreamly-frontend
+      match:
+        path:
+          prefix: /

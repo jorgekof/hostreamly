@@ -20,6 +20,7 @@ const { authMiddleware: auth } = require('./middleware/auth');
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const twoFactorRoutes = require('./routes/twoFactor');
 const videoRoutes = require('./routes/videos');
 const enhancedVideoRoutes = require('./routes/enhancedVideoRoutes');
 const livestreamRoutes = require('./routes/livestreams');
@@ -283,6 +284,7 @@ app.get('/health', asyncHandler(async (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/2fa', twoFactorRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/enhanced-videos', enhancedVideoRoutes);
 app.use('/api/livestreams', livestreamRoutes);
