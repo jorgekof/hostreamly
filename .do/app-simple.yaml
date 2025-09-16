@@ -1,0 +1,85 @@
+name: hostreamly-app
+services:
+- name: backend-api
+  image:
+    registry_type: DOCR
+    repository: hostreamly-backend
+    tag: latest
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 5000
+  health_check:
+    http_path: /api/health
+  routes:
+  - path: /api
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "5000"
+  - key: JWT_SECRET
+    value: "tu-jwt-secret-super-seguro-aqui-cambiar"
+  - key: DATABASE_URL
+    value: "${hostreamly-db.DATABASE_URL}"
+  - key: DO_SPACES_KEY
+    value: "NECESITAS_COMPLETAR_ACCESS_KEY"
+  - key: DO_SPACES_SECRET
+    value: "NECESITAS_COMPLETAR_SECRET_KEY"
+  - key: DO_SPACES_BUCKET
+    value: "NECESITAS_COMPLETAR_BUCKET_NAME"
+  - key: DO_SPACES_REGION
+    value: "nyc3"
+  - key: DO_SPACES_ENDPOINT
+    value: "https://nyc3.digitaloceanspaces.com"
+  - key: BUNNY_API_KEY
+    value: "NECESITAS_COMPLETAR_API_KEY"
+  - key: BUNNY_STREAM_LIBRARY_ID
+    value: "NECESITAS_COMPLETAR_LIBRARY_ID"
+  - key: BUNNY_STORAGE_ZONE
+    value: "NECESITAS_COMPLETAR_STORAGE_ZONE"
+  - key: BUNNY_STORAGE_PASSWORD
+    value: "NECESITAS_COMPLETAR_STORAGE_PASSWORD"
+  - key: BUNNY_PULL_ZONE
+    value: "NECESITAS_COMPLETAR_PULL_ZONE"
+  - key: BUNNY_CDN_HOSTNAME
+    value: "NECESITAS_COMPLETAR_CDN_HOSTNAME"
+
+- name: frontend
+  image:
+    registry_type: DOCR
+    repository: hostreamly-frontend
+    tag: latest
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /
+  envs:
+  - key: VITE_API_BASE_URL
+    value: "https://${APP_DOMAIN}/api"
+  - key: VITE_WEBSOCKET_URL
+    value: "wss://${APP_DOMAIN}"
+  - key: VITE_BUNNY_STREAM_API_KEY
+    value: "NECESITAS_COMPLETAR_ESTA_CLAVE"
+  - key: VITE_BUNNY_STREAM_LIBRARY_ID
+    value: "NECESITAS_COMPLETAR_ESTE_ID"
+  - key: VITE_BUNNY_STREAM_BASE_URL
+    value: "https://video.bunnycdn.com"
+  - key: VITE_BUNNY_CDN_HOSTNAME
+    value: "NECESITAS_COMPLETAR_ESTE_HOSTNAME"
+  - key: VITE_BUNNY_PULL_ZONE
+    value: "NECESITAS_COMPLETAR_PULL_ZONE"
+  - key: VITE_BUNNY_STORAGE_ZONE
+    value: "NECESITAS_COMPLETAR_STORAGE_ZONE"
+  - key: VITE_BUNNY_STORAGE_PASSWORD
+    value: "NECESITAS_COMPLETAR_STORAGE_PASSWORD"
+
+databases:
+- name: hostreamly-db
+  engine: PG
+  version: "13"
+  size: basic-xs
+  num_nodes: 1
+  production: false

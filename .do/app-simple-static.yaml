@@ -1,0 +1,52 @@
+name: hostreamly-web
+services:
+- name: frontend
+  source_dir: /
+  github:
+    repo: digitalocean/sample-nodejs
+    branch: main
+  build_command: npm run build
+  run_command: npm run preview
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 4173
+  routes:
+  - path: /
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: VITE_API_URL
+    value: https://hostreamly-web-backend-api.ondigitalocean.app
+- name: backend-api
+  source_dir: /backend
+  github:
+    repo: digitalocean/sample-nodejs
+    branch: main
+  build_command: npm install
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  routes:
+  - path: /api
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: DO_SPACES_KEY
+    value: DO00WBENZMAW6MK9F2FU
+  - key: DO_SPACES_SECRET
+    value: ry8YjODcKpv/leqbHcUj1lYP5C4G+UtLc6tPOGOtGqg
+  - key: DO_SPACES_BUCKET
+    value: hostreamly
+  - key: DO_SPACES_REGION
+    value: sfo3
+  - key: DO_SPACES_ENDPOINT
+    value: https://hostreamly.sfo3.digitaloceanspaces.com
+databases:
+- engine: PG
+  name: hostreamly-db
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "15"
