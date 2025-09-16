@@ -4,7 +4,7 @@ static_sites:
   github:
     repo: jorgekof/hostreamly
     branch: main
-  build_command: npm install --legacy-peer-deps && npm run build
+  build_command: npm ci --legacy-peer-deps && npm run build
   output_dir: /dist
   environment_slug: node-js
   routes:
