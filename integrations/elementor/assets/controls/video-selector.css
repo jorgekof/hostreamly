@@ -1,0 +1,703 @@
+/**
+ * BunnyVault Video Selector Control Styles
+ * 
+ * @package BunnyVault_Elementor
+ * @since 2.0.0
+ */
+
+/* Base Control Styles */
+.bunnyvault-video-selector-wrapper {
+    border: 1px solid #d5dadf;
+    border-radius: 3px;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* Source Type Selector */
+.bunnyvault-source-selector {
+    display: flex;
+    border-bottom: 1px solid #e6e9ec;
+    background: #f1f3f5;
+}
+
+.bunnyvault-source-option {
+    flex: 1;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #e6e9ec;
+    transition: all 0.2s ease;
+    position: relative;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.bunnyvault-source-option:last-child {
+    border-right: none;
+}
+
+.bunnyvault-source-option:hover {
+    background: #e6e9ec;
+}
+
+.bunnyvault-source-option input[type="radio"] {
+    display: none;
+}
+
+.bunnyvault-source-option input[type="radio"]:checked + span {
+    color: #71d7f7;
+    font-weight: 600;
+}
+
+.bunnyvault-source-option input[type="radio"]:checked {
+    background: #fff;
+}
+
+.bunnyvault-source-option::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.2s ease;
+}
+
+.bunnyvault-source-option input[type="radio"]:checked + span::after {
+    background: #71d7f7;
+}
+
+/* Section Containers */
+.bunnyvault-library-section,
+.bunnyvault-media-library-section,
+.bunnyvault-external-section {
+    padding: 15px;
+}
+
+/* Search and Filters */
+.bunnyvault-search-wrapper {
+    display: flex;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bunnyvault-video-search {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #d5dadf;
+    border-radius: 0;
+    border-right: none;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.bunnyvault-video-search:focus {
+    border-color: #71d7f7;
+    box-shadow: 0 0 0 1px #71d7f7;
+}
+
+.bunnyvault-search-btn {
+    padding: 10px 15px;
+    border: 1px solid #d5dadf;
+    border-left: none;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #6c757d;
+}
+
+.bunnyvault-search-btn:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.bunnyvault-search-btn:active {
+    background: #dee2e6;
+}
+
+.bunnyvault-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.bunnyvault-filters select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d5dadf;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.bunnyvault-filters select:focus {
+    border-color: #71d7f7;
+    box-shadow: 0 0 0 1px #71d7f7;
+}
+
+/* Videos Grid */
+.bunnyvault-videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 2px;
+}
+
+.bunnyvault-videos-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.bunnyvault-videos-grid::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 3px;
+}
+
+.bunnyvault-videos-grid::-webkit-scrollbar-thumb {
+    background: #d5dadf;
+    border-radius: 3px;
+}
+
+.bunnyvault-videos-grid::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+.bunnyvault-video-item {
+    position: relative;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bunnyvault-video-item:hover {
+    border-color: #71d7f7;
+    box-shadow: 0 4px 8px rgba(113, 215, 247, 0.2);
+    transform: translateY(-1px);
+}
+
+.bunnyvault-video-item.selected {
+    border-color: #71d7f7;
+    box-shadow: 0 0 0 1px #71d7f7, 0 4px 12px rgba(113, 215, 247, 0.3);
+}
+
+.bunnyvault-video-thumbnail {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.bunnyvault-video-item:hover .bunnyvault-video-thumbnail {
+    transform: scale(1.05);
+}
+
+.bunnyvault-video-info {
+    padding: 10px 8px;
+    background: #fff;
+}
+
+.bunnyvault-video-title {
+    font-size: 11px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #333;
+}
+
+.bunnyvault-video-duration {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Loading States */
+.bunnyvault-loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.bunnyvault-loading i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+    color: #71d7f7;
+}
+
+.bunnyvault-loading span {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.bunnyvault-no-videos,
+.bunnyvault-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.bunnyvault-no-videos p,
+.bunnyvault-error p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.bunnyvault-error p {
+    color: #dc3545;
+}
+
+/* Pagination */
+.bunnyvault-pagination {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.bunnyvault-load-more {
+    padding: 8px 16px;
+    border: 1px solid #71d7f7;
+    background: transparent;
+    color: #71d7f7;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.bunnyvault-load-more:hover {
+    background: #71d7f7;
+    color: #fff;
+}
+
+/* Media Library Section */
+.bunnyvault-select-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed #d5dadf;
+    background: #f8f9fa;
+    color: #495057;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.bunnyvault-select-media:hover {
+    border-color: #71d7f7;
+    background: #f0f9ff;
+    color: #71d7f7;
+    text-decoration: none;
+}
+
+.bunnyvault-selected-media {
+    margin-top: 15px;
+}
+
+.bunnyvault-media-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e6e9ec;
+    border-radius: 6px;
+    background: #f8f9fa;
+    position: relative;
+}
+
+.bunnyvault-media-preview img {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.bunnyvault-media-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.bunnyvault-media-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bunnyvault-media-info .bunnyvault-duration,
+.bunnyvault-media-info .bunnyvault-size {
+    display: inline-block;
+    font-size: 11px;
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+.bunnyvault-remove-media {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.bunnyvault-remove-media:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+/* External URL Section */
+.bunnyvault-external-url {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d5dadf;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.bunnyvault-external-url:focus {
+    border-color: #71d7f7;
+    box-shadow: 0 0 0 1px #71d7f7;
+}
+
+.bunnyvault-url-preview {
+    border: 1px solid #e6e9ec;
+    border-radius: 6px;
+    padding: 12px;
+    background: #f8f9fa;
+}
+
+.bunnyvault-url-info {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.bunnyvault-url-info img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.bunnyvault-url-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.bunnyvault-url-details h4 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+}
+
+.bunnyvault-url-source {
+    display: inline-block;
+    font-size: 10px;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.bunnyvault-url-details .bunnyvault-duration {
+    font-size: 11px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Selected Video Preview */
+.bunnyvault-selected-preview {
+    margin-top: 15px;
+    border-top: 1px solid #e6e9ec;
+    padding-top: 15px;
+}
+
+.bunnyvault-preview-wrapper {
+    position: relative;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.bunnyvault-preview-wrapper img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.bunnyvault-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bunnyvault-preview-wrapper:hover .bunnyvault-preview-overlay {
+    opacity: 1;
+}
+
+.bunnyvault-preview-play {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bunnyvault-preview-play:hover {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+.bunnyvault-preview-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+}
+
+.bunnyvault-preview-info p {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bunnyvault-preview-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.bunnyvault-meta-item {
+    font-size: 11px;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+}
+
+.bunnyvault-meta-item i {
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+.bunnyvault-change-video {
+    padding: 6px 12px;
+    border: 1px solid #d5dadf;
+    background: #fff;
+    color: #495057;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.bunnyvault-change-video:hover {
+    border-color: #71d7f7;
+    color: #71d7f7;
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .bunnyvault-source-selector {
+        flex-direction: column;
+    }
+    
+    .bunnyvault-source-option {
+        border-right: none;
+        border-bottom: 1px solid #e6e9ec;
+    }
+    
+    .bunnyvault-source-option:last-child {
+        border-bottom: none;
+    }
+    
+    .bunnyvault-filters {
+        flex-direction: column;
+    }
+    
+    .bunnyvault-videos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+    }
+    
+    .bunnyvault-url-info {
+        flex-direction: column;
+    }
+    
+    .bunnyvault-url-info img {
+        width: 100%;
+        height: 120px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .bunnyvault-video-selector-wrapper {
+        background: #2c2c2c;
+        border-color: #444;
+    }
+    
+    .bunnyvault-source-selector {
+        background: #333;
+    }
+    
+    .bunnyvault-source-option {
+        color: #ccc;
+        border-color: #444;
+    }
+    
+    .bunnyvault-source-option:hover {
+        background: #444;
+    }
+    
+    .bunnyvault-video-search,
+    .bunnyvault-filters select,
+    .bunnyvault-external-url {
+        background: #333;
+        border-color: #444;
+        color: #ccc;
+    }
+    
+    .bunnyvault-video-item {
+        background: #333;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .bunnyvault-video-title {
+        color: #ccc;
+    }
+    
+    .bunnyvault-media-preview,
+    .bunnyvault-url-preview {
+        background: #333;
+        border-color: #444;
+    }
+    
+    .bunnyvault-select-media {
+        background: #333;
+        border-color: #444;
+        color: #ccc;
+    }
+}
+
+/* Animation Classes */
+.bunnyvault-fade-in {
+    animation: bunnyvaultFadeIn 0.3s ease;
+}
+
+.bunnyvault-slide-up {
+    animation: bunnyvaultSlideUp 0.3s ease;
+}
+
+@keyframes bunnyvaultFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bunnyvaultSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus States for Accessibility */
+.bunnyvault-video-item:focus,
+.bunnyvault-select-media:focus,
+.bunnyvault-load-more:focus,
+.bunnyvault-change-video:focus {
+    outline: 2px solid #71d7f7;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .bunnyvault-video-selector-wrapper {
+        border-width: 2px;
+    }
+    
+    .bunnyvault-video-item.selected {
+        border-width: 3px;
+    }
+    
+    .bunnyvault-source-option input[type="radio"]:checked + span {
+        text-decoration: underline;
+    }
+}

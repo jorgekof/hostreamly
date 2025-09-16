@@ -1,0 +1,2323 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hostreamly Media API",
+    "version": "2.0.0",
+    "description": "API completa para la plataforma Hostreamly Media con funcionalidades empresariales avanzadas. Esta API proporciona endpoints para gestión de videos, streaming en vivo, analíticas avanzadas, webhooks personalizados, formularios de contacto, enlaces de descarga controlados y mucho más.",
+    "termsOfService": "https://hostreamly.com/terms",
+    "contact": {
+      "name": "Hostreamly Support",
+      "email": "support@hostreamly.com",
+      "url": "https://hostreamly.com/support"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api",
+      "description": "Servidor de desarrollo"
+    },
+    {
+      "url": "https://api.hostreamly.com/api",
+      "description": "Servidor de producción"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": ["error", "message"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Código de error específico",
+            "example": "VALIDATION_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensaje descriptivo del error",
+            "example": "Los datos proporcionados no son válidos"
+          },
+          "details": {
+            "type": "array",
+            "description": "Detalles adicionales del error",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "El email debe tener un formato válido"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "error": "VALIDATION_ERROR",
+          "message": "Los datos proporcionados no son válidos",
+          "details": [
+            {
+              "field": "email",
+              "message": "El email debe tener un formato válido"
+            }
+          ]
+        }
+      },
+      "WebhookConfig": {
+        "type": "object",
+        "required": ["name", "url", "events"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único del webhook",
+            "example": "wh_1234567890abcdef",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre descriptivo del webhook",
+            "example": "Notificaciones de Video",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL de destino donde se enviarán las notificaciones",
+            "example": "https://mi-app.com/webhooks/hostreamly"
+          },
+          "events": {
+            "type": "array",
+            "description": "Lista de eventos que activarán este webhook",
+            "items": {
+              "type": "string",
+              "enum": ["upload.completed", "upload.failed", "file.deleted", "user.registered", "payment.completed", "video.processed", "stream.started", "stream.ended"]
+            },
+            "example": ["upload.completed", "video.processed"],
+            "minItems": 1
+          },
+          "secret": {
+            "type": "string",
+            "description": "Clave secreta para verificar la autenticidad de las notificaciones",
+            "example": "whsec_1234567890abcdef",
+            "writeOnly": true
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indica si el webhook está activo",
+            "example": true,
+            "default": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "Número máximo de reintentos en caso de fallo",
+            "example": 3,
+            "minimum": 0,
+            "maximum": 10,
+            "default": 3
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "Tiempo límite en segundos para la respuesta del webhook",
+            "example": 30,
+            "minimum": 5,
+            "maximum": 300,
+            "default": 30
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha de creación del webhook",
+            "example": "2024-01-15T10:30:00Z",
+            "readOnly": true
+          },
+          "lastTriggered": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Última vez que se activó el webhook",
+            "example": "2024-01-15T14:25:30Z",
+            "readOnly": true
+          }
+        },
+        "example": {
+          "id": "wh_1234567890abcdef",
+          "name": "Notificaciones de Video",
+          "url": "https://mi-app.com/webhooks/hostreamly",
+          "events": ["upload.completed", "video.processed"],
+          "active": true,
+          "retryCount": 3,
+          "timeout": 30,
+          "createdAt": "2024-01-15T10:30:00Z",
+          "lastTriggered": "2024-01-15T14:25:30Z"
+        }
+      },
+      "AnalyticsReport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["usage", "performance", "revenue", "user_activity", "storage", "bandwidth"]
+          },
+          "dateRange": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "format": "date"
+              },
+              "end": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "filters": {
+            "type": "object"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["json", "csv", "excel", "pdf"]
+          }
+        }
+      },
+      "WhiteLabelConfig": {
+        "type": "object",
+        "properties": {
+          "brandName": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string",
+            "format": "uri"
+          },
+          "favicon": {
+            "type": "string",
+            "format": "uri"
+          },
+          "primaryColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "secondaryColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "customDomain": {
+            "type": "string"
+          },
+          "customCSS": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CustomDomain": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "verificationToken": {
+            "type": "string"
+          },
+          "dnsRecords": {
+            "type": "object",
+            "properties": {
+              "cname": {
+                "type": "string"
+              },
+              "txt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "SLAMetrics": {
+        "type": "object",
+        "properties": {
+          "uptime": {
+            "type": "number",
+            "format": "float"
+          },
+          "responseTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "errorRate": {
+            "type": "number",
+            "format": "float"
+          },
+          "availability": {
+            "type": "number",
+            "format": "float"
+          },
+          "compliance": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "TeamMember": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "manager", "user", "viewer"]
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "pending", "suspended"]
+          }
+        }
+      },
+      "DownloadLink": {
+        "type": "object",
+        "required": ["video_id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único del enlace de descarga",
+            "example": "dl_1234567890abcdef",
+            "readOnly": true
+          },
+          "token": {
+            "type": "string",
+            "description": "Token único para acceder a la descarga",
+            "example": "tok_abcdef1234567890",
+            "readOnly": true
+          },
+          "video_id": {
+            "type": "string",
+            "description": "ID del video asociado",
+            "example": "vid_1234567890"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID del usuario propietario",
+            "example": "usr_1234567890"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha de expiración del enlace",
+            "example": "2024-01-20T10:30:00Z"
+          },
+          "max_downloads": {
+            "type": "integer",
+            "description": "Número máximo de descargas permitidas",
+            "example": 5,
+            "minimum": 1,
+            "default": 1
+          },
+          "download_count": {
+            "type": "integer",
+            "description": "Número actual de descargas realizadas",
+            "example": 2,
+            "readOnly": true
+          },
+          "ip_restrictions": {
+            "type": "array",
+            "description": "Lista de IPs o rangos CIDR permitidos",
+            "items": {
+              "type": "string"
+            },
+            "example": ["192.168.1.0/24", "10.0.0.1"]
+          },
+          "require_auth": {
+            "type": "boolean",
+            "description": "Si requiere autenticación para descargar",
+            "example": false,
+            "default": false
+          },
+          "notify_on_download": {
+            "type": "boolean",
+            "description": "Si enviar notificación al descargar",
+            "example": true,
+            "default": false
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "expired", "exhausted", "disabled"],
+            "description": "Estado actual del enlace",
+            "example": "active"
+          }
+        },
+        "example": {
+          "id": "dl_1234567890abcdef",
+          "token": "tok_abcdef1234567890",
+          "video_id": "vid_1234567890",
+          "user_id": "usr_1234567890",
+          "expires_at": "2024-01-20T10:30:00Z",
+          "max_downloads": 5,
+          "download_count": 2,
+          "ip_restrictions": ["192.168.1.0/24"],
+          "require_auth": false,
+          "notify_on_download": true,
+          "status": "active"
+        }
+      },
+      "ContactForm": {
+        "type": "object",
+        "required": ["name", "title"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único del formulario",
+            "example": "cf_1234567890abcdef",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre único del formulario",
+            "example": "contacto-soporte",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "title": {
+            "type": "string",
+            "description": "Título del formulario",
+            "example": "Formulario de Contacto - Soporte",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "description": {
+            "type": "string",
+            "description": "Descripción del formulario",
+            "example": "Envíanos tus consultas y te responderemos pronto"
+          },
+          "fields_config": {
+            "type": "object",
+            "description": "Configuración de campos del formulario",
+            "example": {
+              "name": { "required": true, "label": "Nombre completo" },
+              "email": { "required": true, "label": "Correo electrónico" },
+              "message": { "required": true, "label": "Mensaje", "type": "textarea" }
+            }
+          },
+          "allow_video_upload": {
+            "type": "boolean",
+            "description": "Permitir subida de videos en el formulario",
+            "example": true,
+            "default": false
+          },
+          "notification_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email para recibir notificaciones",
+            "example": "soporte@miempresa.com"
+          },
+          "webhook_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL del webhook para notificaciones",
+            "example": "https://mi-app.com/webhooks/contact"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Si el formulario está activo",
+            "example": true,
+            "default": true
+          },
+          "require_auth": {
+            "type": "boolean",
+            "description": "Si requiere autenticación para enviar",
+            "example": false,
+            "default": false
+          },
+          "allowed_domains": {
+            "type": "array",
+            "description": "Dominios permitidos para embeber el formulario",
+            "items": {
+              "type": "string"
+            },
+            "example": ["miempresa.com", "*.miempresa.com"]
+          },
+          "submissions_count": {
+            "type": "integer",
+            "description": "Número total de envíos recibidos",
+            "example": 42,
+            "readOnly": true
+          }
+        },
+        "example": {
+          "id": "cf_1234567890abcdef",
+          "name": "contacto-soporte",
+          "title": "Formulario de Contacto - Soporte",
+          "description": "Envíanos tus consultas y te responderemos pronto",
+          "fields_config": {
+            "name": { "required": true, "label": "Nombre completo" },
+            "email": { "required": true, "label": "Correo electrónico" },
+            "message": { "required": true, "label": "Mensaje", "type": "textarea" }
+          },
+          "allow_video_upload": true,
+          "notification_email": "soporte@miempresa.com",
+          "is_active": true,
+          "require_auth": false,
+          "allowed_domains": ["miempresa.com"],
+          "submissions_count": 42
+        }
+      },
+      "ContactSubmission": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único del envío",
+            "example": "cs_1234567890abcdef",
+            "readOnly": true
+          },
+          "contact_form_id": {
+            "type": "string",
+            "description": "ID del formulario de contacto",
+            "example": "cf_1234567890abcdef"
+          },
+          "submission_data": {
+            "type": "object",
+            "description": "Datos enviados en el formulario",
+            "example": {
+              "name": "Juan Pérez",
+              "email": "juan@ejemplo.com",
+              "message": "Necesito ayuda con mi cuenta"
+            }
+          },
+          "video_id": {
+            "type": "string",
+            "description": "ID del video adjunto (si aplica)",
+            "example": "vid_1234567890"
+          },
+          "ip_address": {
+            "type": "string",
+            "description": "Dirección IP del remitente",
+            "example": "192.168.1.100"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["new", "read", "replied", "archived"],
+            "description": "Estado del envío",
+            "example": "new"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "normal", "high", "urgent"],
+            "description": "Prioridad del envío",
+            "example": "normal"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Etiquetas del envío",
+            "items": {
+              "type": "string"
+            },
+            "example": ["soporte", "cuenta"]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha de creación del envío",
+            "example": "2024-01-15T10:30:00Z",
+            "readOnly": true
+          }
+        },
+        "example": {
+          "id": "cs_1234567890abcdef",
+          "contact_form_id": "cf_1234567890abcdef",
+          "submission_data": {
+            "name": "Juan Pérez",
+            "email": "juan@ejemplo.com",
+            "message": "Necesito ayuda con mi cuenta"
+          },
+          "ip_address": "192.168.1.100",
+          "status": "new",
+          "priority": "normal",
+          "tags": ["soporte", "cuenta"],
+          "created_at": "2024-01-15T10:30:00Z"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/webhooks": {
+      "get": {
+        "summary": "Obtener configuraciones de webhooks",
+        "description": "Recupera todas las configuraciones de webhooks del usuario autenticado. Los webhooks permiten recibir notificaciones en tiempo real cuando ocurren eventos específicos en la plataforma.",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "active",
+            "in": "query",
+            "description": "Filtrar por webhooks activos o inactivos",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          {
+            "name": "event",
+            "in": "query",
+            "description": "Filtrar por tipo de evento específico",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["upload.completed", "upload.failed", "file.deleted", "user.registered", "payment.completed", "video.processed", "stream.started", "stream.ended"],
+              "example": "upload.completed"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de configuraciones de webhooks recuperada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WebhookConfig"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Número total de webhooks",
+                      "example": 3
+                    }
+                  }
+                },
+                "examples": {
+                  "multiple_webhooks": {
+                    "summary": "Usuario con múltiples webhooks",
+                    "value": {
+                      "success": true,
+                      "data": [
+                        {
+                          "id": "wh_1234567890abcdef",
+                          "name": "Notificaciones de Video",
+                          "url": "https://mi-app.com/webhooks/hostreamly",
+                          "events": ["upload.completed", "video.processed"],
+                          "active": true,
+                          "retryCount": 3,
+                          "timeout": 30,
+                          "createdAt": "2024-01-15T10:30:00Z",
+                          "lastTriggered": "2024-01-15T14:25:30Z"
+                        },
+                        {
+                          "id": "wh_0987654321fedcba",
+                          "name": "Alertas de Streaming",
+                          "url": "https://mi-app.com/webhooks/streaming",
+                          "events": ["stream.started", "stream.ended"],
+                          "active": true,
+                          "retryCount": 5,
+                          "timeout": 15,
+                          "createdAt": "2024-01-10T08:15:00Z",
+                          "lastTriggered": "2024-01-15T12:00:00Z"
+                        }
+                      ],
+                      "total": 2
+                    }
+                  },
+                  "empty_webhooks": {
+                    "summary": "Usuario sin webhooks configurados",
+                    "value": {
+                      "success": true,
+                      "data": [],
+                      "total": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado - Token de acceso inválido o expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "UNAUTHORIZED",
+                  "message": "Token de acceso inválido o expirado"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear nueva configuración de webhook",
+        "description": "Crea una nueva configuración de webhook para recibir notificaciones automáticas cuando ocurran eventos específicos. Los webhooks son útiles para integrar Hostreamly con sistemas externos y automatizar flujos de trabajo.",
+        "tags": ["Webhooks"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "url", "events"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nombre descriptivo para el webhook",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "example": "Notificaciones de Video"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL donde se enviarán las notificaciones webhook",
+                    "example": "https://mi-app.com/webhooks/hostreamly"
+                  },
+                  "events": {
+                    "type": "array",
+                    "description": "Lista de eventos que activarán el webhook",
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "string",
+                      "enum": ["upload.completed", "upload.failed", "file.deleted", "user.registered", "payment.completed", "video.processed", "stream.started", "stream.ended"]
+                    },
+                    "example": ["upload.completed", "video.processed"]
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "Si el webhook está activo",
+                    "default": true,
+                    "example": true
+                  },
+                  "retryCount": {
+                    "type": "integer",
+                    "description": "Número de reintentos en caso de fallo",
+                    "minimum": 0,
+                    "maximum": 10,
+                    "default": 3,
+                    "example": 3
+                  },
+                  "timeout": {
+                    "type": "integer",
+                    "description": "Timeout en segundos para la petición HTTP",
+                    "minimum": 5,
+                    "maximum": 60,
+                    "default": 30,
+                    "example": 30
+                  },
+                  "headers": {
+                    "type": "object",
+                    "description": "Headers HTTP adicionales para enviar con el webhook",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "example": {
+                      "Authorization": "Bearer mi-token-secreto",
+                      "X-Custom-Header": "valor-personalizado"
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "video_notifications": {
+                  "summary": "Webhook para notificaciones de video",
+                  "description": "Configuración típica para recibir notificaciones cuando se completan uploads y procesamientos de video",
+                  "value": {
+                    "name": "Notificaciones de Video",
+                    "url": "https://mi-app.com/webhooks/hostreamly",
+                    "events": ["upload.completed", "video.processed"],
+                    "active": true,
+                    "retryCount": 3,
+                    "timeout": 30,
+                    "headers": {
+                      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                      "X-Source": "hostreamly"
+                    }
+                  }
+                },
+                "streaming_alerts": {
+                  "summary": "Webhook para alertas de streaming",
+                  "description": "Configuración para monitorear eventos de streaming en vivo",
+                  "value": {
+                    "name": "Alertas de Streaming",
+                    "url": "https://streaming-dashboard.com/api/webhooks",
+                    "events": ["stream.started", "stream.ended"],
+                    "active": true,
+                    "retryCount": 5,
+                    "timeout": 15
+                  }
+                },
+                "payment_tracking": {
+                  "summary": "Webhook para seguimiento de pagos",
+                  "description": "Configuración para integrar con sistemas de facturación",
+                  "value": {
+                    "name": "Seguimiento de Pagos",
+                    "url": "https://billing.mi-empresa.com/webhooks/payments",
+                    "events": ["payment.completed", "user.registered"],
+                    "active": true,
+                    "retryCount": 2,
+                    "timeout": 45,
+                    "headers": {
+                      "X-API-Key": "sk_live_1234567890abcdef",
+                      "Content-Type": "application/json"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookConfig"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Webhook creado exitosamente"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "wh_1234567890abcdef",
+                    "name": "Notificaciones de Video",
+                    "url": "https://mi-app.com/webhooks/bunnyvault",
+                    "events": ["upload.completed", "video.processed"],
+                    "active": true,
+                    "retryCount": 3,
+                    "timeout": 30,
+                    "createdAt": "2024-01-15T10:30:00Z",
+                    "lastTriggered": null
+                  },
+                  "message": "Webhook creado exitosamente"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "invalid_url": {
+                    "summary": "URL inválida",
+                    "value": {
+                      "error": "VALIDATION_ERROR",
+                      "message": "Los datos proporcionados no son válidos",
+                      "details": [
+                        {
+                          "field": "url",
+                          "message": "La URL debe ser válida y usar HTTPS"
+                        }
+                      ]
+                    }
+                  },
+                  "invalid_events": {
+                    "summary": "Eventos inválidos",
+                    "value": {
+                      "error": "VALIDATION_ERROR",
+                      "message": "Los datos proporcionados no son válidos",
+                      "details": [
+                        {
+                          "field": "events",
+                          "message": "Debe especificar al menos un evento válido"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "UNAUTHORIZED",
+                  "message": "Token de acceso inválido o expirado"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Límite de tasa excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "RATE_LIMIT_EXCEEDED",
+                  "message": "Has excedido el límite de creación de webhooks. Intenta nuevamente en 1 hora."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{id}": {
+      "get": {
+        "summary": "Obtener configuración de webhook específico",
+        "description": "Recupera los detalles de una configuración de webhook específica por su ID",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único del webhook",
+            "schema": {
+              "type": "string",
+              "pattern": "^wh_[a-zA-Z0-9]{16}$",
+              "example": "wh_1234567890abcdef"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configuración de webhook recuperada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookConfig"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "wh_1234567890abcdef",
+                    "name": "Notificaciones de Video",
+                    "url": "https://mi-app.com/webhooks/bunnyvault",
+                    "events": ["upload.completed", "video.processed"],
+                    "active": true,
+                    "retryCount": 3,
+                    "timeout": 30,
+                    "createdAt": "2024-01-15T10:30:00Z",
+                    "lastTriggered": "2024-01-15T14:25:30Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "NOT_FOUND",
+                  "message": "El webhook especificado no existe o no tienes permisos para acceder a él"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar configuración de webhook",
+        "description": "Actualiza una configuración de webhook existente. Todos los campos son opcionales, solo se actualizarán los campos proporcionados.",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único del webhook",
+            "schema": {
+              "type": "string",
+              "pattern": "^wh_[a-zA-Z0-9]{16}$",
+              "example": "wh_1234567890abcdef"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "example": "Notificaciones de Video Actualizadas"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://nueva-url.com/webhooks/bunnyvault"
+                  },
+                  "events": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "items": {
+                      "type": "string",
+                      "enum": ["upload.completed", "upload.failed", "file.deleted", "user.registered", "payment.completed", "video.processed", "stream.started", "stream.ended"]
+                    },
+                    "example": ["upload.completed", "video.processed", "upload.failed"]
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "retryCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 10,
+                    "example": 5
+                  },
+                  "timeout": {
+                    "type": "integer",
+                    "minimum": 5,
+                    "maximum": 60,
+                    "example": 45
+                  }
+                }
+              },
+              "examples": {
+                "update_url": {
+                  "summary": "Actualizar solo la URL",
+                  "value": {
+                    "url": "https://nueva-url.com/webhooks/bunnyvault"
+                  }
+                },
+                "disable_webhook": {
+                  "summary": "Desactivar webhook",
+                  "value": {
+                    "active": false
+                  }
+                },
+                "add_events": {
+                  "summary": "Añadir eventos adicionales",
+                  "value": {
+                    "events": ["upload.completed", "video.processed", "upload.failed", "stream.started"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookConfig"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Webhook actualizado exitosamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar configuración de webhook",
+        "description": "Elimina permanentemente una configuración de webhook. Esta acción no se puede deshacer.",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único del webhook",
+            "schema": {
+              "type": "string",
+              "pattern": "^wh_[a-zA-Z0-9]{16}$",
+              "example": "wh_1234567890abcdef"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Webhook eliminado exitosamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{id}/test": {
+      "post": {
+        "summary": "Probar webhook",
+        "description": "Envía una notificación de prueba al webhook especificado para verificar que la configuración funciona correctamente",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único del webhook",
+            "schema": {
+              "type": "string",
+              "pattern": "^wh_[a-zA-Z0-9]{16}$",
+              "example": "wh_1234567890abcdef"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "string",
+                    "description": "Tipo de evento a simular en la prueba",
+                    "enum": ["upload.completed", "upload.failed", "file.deleted", "user.registered", "payment.completed", "video.processed", "stream.started", "stream.ended"],
+                    "default": "upload.completed",
+                    "example": "upload.completed"
+                  },
+                  "testData": {
+                    "type": "object",
+                    "description": "Datos de prueba personalizados para enviar con el webhook",
+                    "additionalProperties": true,
+                    "example": {
+                      "videoId": "vid_test123",
+                      "fileName": "test-video.mp4",
+                      "fileSize": 1024000
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "upload_test": {
+                  "summary": "Prueba de upload completado",
+                  "value": {
+                    "event": "upload.completed",
+                    "testData": {
+                      "videoId": "vid_test123",
+                      "fileName": "test-video.mp4",
+                      "fileSize": 1024000,
+                      "duration": 120,
+                      "uploadedAt": "2024-01-15T10:30:00Z"
+                    }
+                  }
+                },
+                "stream_test": {
+                  "summary": "Prueba de stream iniciado",
+                  "value": {
+                    "event": "stream.started",
+                    "testData": {
+                      "streamId": "stream_test456",
+                      "streamKey": "sk_test789",
+                      "startedAt": "2024-01-15T15:00:00Z",
+                      "quality": "1080p"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Prueba de webhook enviada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Prueba de webhook enviada exitosamente"
+                    },
+                    "testResult": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": ["success", "failed"],
+                          "example": "success"
+                        },
+                        "responseCode": {
+                          "type": "integer",
+                          "example": 200
+                        },
+                        "responseTime": {
+                          "type": "integer",
+                          "description": "Tiempo de respuesta en milisegundos",
+                          "example": 245
+                        },
+                        "error": {
+                          "type": "string",
+                          "description": "Mensaje de error si la prueba falló",
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "successful_test": {
+                    "summary": "Prueba exitosa",
+                    "value": {
+                      "success": true,
+                      "message": "Prueba de webhook enviada exitosamente",
+                      "testResult": {
+                        "status": "success",
+                        "responseCode": 200,
+                        "responseTime": 245,
+                        "error": null
+                      }
+                    }
+                  },
+                  "failed_test": {
+                    "summary": "Prueba fallida",
+                    "value": {
+                      "success": true,
+                      "message": "Prueba de webhook enviada, pero falló",
+                      "testResult": {
+                        "status": "failed",
+                        "responseCode": 404,
+                        "responseTime": 5000,
+                        "error": "Endpoint no encontrado"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/downloads": {
+      "post": {
+        "summary": "Crear enlace de descarga",
+        "description": "Crea un enlace de descarga controlado para un video específico con permisos y configuración de expiración. Útil para compartir videos de forma segura con acceso limitado.",
+        "tags": ["Downloads"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["videoId"],
+                "properties": {
+                  "videoId": {
+                    "type": "string",
+                    "description": "ID del video para el cual crear el enlace de descarga",
+                    "example": "vid_1234567890abcdef"
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Fecha y hora de expiración del enlace (ISO 8601)",
+                    "example": "2024-01-22T10:30:00Z"
+                  },
+                  "maxDownloads": {
+                    "type": "integer",
+                    "description": "Número máximo de descargas permitidas",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "example": 5
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Contraseña opcional para proteger el enlace",
+                    "minLength": 4,
+                    "maxLength": 50,
+                    "example": "mi-password-seguro"
+                  },
+                  "allowedIPs": {
+                    "type": "array",
+                    "description": "Lista de direcciones IP permitidas para descargar",
+                    "items": {
+                      "type": "string",
+                      "format": "ipv4"
+                    },
+                    "example": ["192.168.1.100", "10.0.0.50"]
+                  },
+                  "notifyOnDownload": {
+                    "type": "boolean",
+                    "description": "Si enviar notificación cuando se use el enlace",
+                    "default": false,
+                    "example": true
+                  }
+                }
+              },
+              "examples": {
+                "simple_download": {
+                  "summary": "Enlace de descarga simple",
+                  "description": "Enlace básico con expiración de 7 días",
+                  "value": {
+                    "videoId": "vid_1234567890abcdef",
+                    "expiresAt": "2024-01-22T10:30:00Z",
+                    "maxDownloads": 10
+                  }
+                },
+                "secure_download": {
+                  "summary": "Enlace de descarga seguro",
+                  "description": "Enlace protegido con contraseña y restricción de IP",
+                  "value": {
+                    "videoId": "vid_1234567890abcdef",
+                    "expiresAt": "2024-01-16T23:59:59Z",
+                    "maxDownloads": 1,
+                    "password": "video-confidencial-2024",
+                    "allowedIPs": ["192.168.1.100"],
+                    "notifyOnDownload": true
+                  }
+                },
+                "team_sharing": {
+                  "summary": "Compartir con equipo",
+                  "description": "Enlace para compartir con múltiples miembros del equipo",
+                  "value": {
+                    "videoId": "vid_1234567890abcdef",
+                    "expiresAt": "2024-01-30T00:00:00Z",
+                    "maxDownloads": 50,
+                    "notifyOnDownload": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Enlace de descarga creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/DownloadLink"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Enlace de descarga creado exitosamente"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "dl_9876543210fedcba",
+                    "token": "dlt_abcdef1234567890",
+                    "videoId": "vid_1234567890abcdef",
+                    "downloadUrl": "https://api.hostreamly.com/downloads/dlt_abcdef1234567890",
+                    "expiresAt": "2024-01-22T10:30:00Z",
+                    "maxDownloads": 5,
+                    "downloadCount": 0,
+                    "isActive": true,
+                    "createdAt": "2024-01-15T10:30:00Z"
+                  },
+                  "message": "Enlace de descarga creado exitosamente"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "invalid_video": {
+                    "summary": "Video no encontrado",
+                    "value": {
+                      "error": "VALIDATION_ERROR",
+                      "message": "El video especificado no existe o no tienes permisos para acceder a él",
+                      "details": [
+                        {
+                          "field": "videoId",
+                          "message": "Video no encontrado"
+                        }
+                      ]
+                    }
+                  },
+                  "invalid_expiration": {
+                    "summary": "Fecha de expiración inválida",
+                    "value": {
+                      "error": "VALIDATION_ERROR",
+                      "message": "La fecha de expiración debe ser futura",
+                      "details": [
+                        {
+                          "field": "expiresAt",
+                          "message": "La fecha debe ser posterior a la fecha actual"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Límite de tasa excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "RATE_LIMIT_EXCEEDED",
+                  "message": "Has excedido el límite de creación de enlaces de descarga. Intenta nuevamente en 1 hora."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar enlaces de descarga",
+        "description": "Obtiene una lista de todos los enlaces de descarga creados por el usuario autenticado",
+        "tags": ["Downloads"],
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "query",
+            "description": "Filtrar por ID de video específico",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "vid_1234567890abcdef"
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "description": "Filtrar por enlaces activos o inactivos",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Número máximo de resultados a devolver",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Número de resultados a omitir (para paginación)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "example": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de enlaces de descarga recuperada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DownloadLink"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 45
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 20
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/downloads/{token}": {
+      "get": {
+        "summary": "Obtener información del enlace de descarga",
+        "description": "Recupera información detallada sobre un enlace de descarga específico usando su token",
+        "tags": ["Downloads"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "description": "Token único del enlace de descarga",
+            "schema": {
+              "type": "string",
+              "pattern": "^dlt_[a-zA-Z0-9]{16}$",
+              "example": "dlt_abcdef1234567890"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Información del enlace de descarga",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "videoTitle": {
+                          "type": "string",
+                          "example": "Mi Video Increíble"
+                        },
+                        "fileSize": {
+                          "type": "integer",
+                          "description": "Tamaño del archivo en bytes",
+                          "example": 52428800
+                        },
+                        "duration": {
+                          "type": "integer",
+                          "description": "Duración del video en segundos",
+                          "example": 300
+                        },
+                        "format": {
+                          "type": "string",
+                          "example": "mp4"
+                        },
+                        "quality": {
+                          "type": "string",
+                          "example": "1080p"
+                        },
+                        "expiresAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-01-22T10:30:00Z"
+                        },
+                        "remainingDownloads": {
+                          "type": "integer",
+                          "example": 3
+                        },
+                        "requiresPassword": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enlace de descarga no encontrado o expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Procesar descarga",
+        "description": "Inicia la descarga del video asociado al enlace. Requiere validación de contraseña si está configurada.",
+        "tags": ["Downloads"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "description": "Token único del enlace de descarga",
+            "schema": {
+              "type": "string",
+              "pattern": "^dlt_[a-zA-Z0-9]{16}$",
+              "example": "dlt_abcdef1234567890"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "description": "Contraseña del enlace (requerida si el enlace está protegido)",
+                    "example": "mi-password-seguro"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Descarga iniciada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "downloadUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL directa para descargar el archivo",
+                      "example": "https://cdn.hostreamly.com/downloads/temp/vid_1234567890abcdef.mp4?token=temp_xyz789&expires=1642248600"
+                    },
+                    "expiresIn": {
+                      "type": "integer",
+                      "description": "Tiempo en segundos hasta que expire la URL de descarga",
+                      "example": 3600
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitud inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "wrong_password": {
+                    "summary": "Contraseña incorrecta",
+                    "value": {
+                      "error": "INVALID_PASSWORD",
+                      "message": "La contraseña proporcionada es incorrecta"
+                    }
+                  },
+                  "ip_not_allowed": {
+                    "summary": "IP no permitida",
+                    "value": {
+                      "error": "IP_NOT_ALLOWED",
+                      "message": "Tu dirección IP no está autorizada para descargar este archivo"
+                    }
+                  },
+                  "download_limit_exceeded": {
+                    "summary": "Límite de descargas excedido",
+                    "value": {
+                      "error": "DOWNLOAD_LIMIT_EXCEEDED",
+                      "message": "Se ha alcanzado el límite máximo de descargas para este enlace"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enlace no encontrado o expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact": {
+      "post": {
+        "summary": "Crear formulario de contacto",
+        "description": "Crea un nuevo formulario de contacto personalizable con capacidad de upload de video integrado",
+        "tags": ["Contact Forms"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{webhookId}": {
+      "get": {
+        "summary": "Obtener configuración específica de webhook",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Configuración del webhook",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookConfig"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar configuración de webhook",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook actualizado exitosamente"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar configuración de webhook",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook eliminado exitosamente"
+          }
+        }
+      }
+    },
+    "/webhooks/{webhookId}/test": {
+      "post": {
+        "summary": "Probar webhook",
+        "tags": ["Webhooks"],
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prueba de webhook exitosa"
+          }
+        }
+      }
+    },
+    "/advanced-analytics/reports": {
+      "get": {
+        "summary": "Obtener reportes de analíticas",
+        "tags": ["Analíticas Avanzadas"],
+        "responses": {
+          "200": {
+            "description": "Lista de reportes disponibles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnalyticsReport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Generar nuevo reporte de analíticas",
+        "tags": ["Analíticas Avanzadas"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyticsReport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reporte generado exitosamente"
+          }
+        }
+      }
+    },
+    "/advanced-analytics/reports/{reportId}/export": {
+      "get": {
+        "summary": "Exportar reporte en formato específico",
+        "tags": ["Analíticas Avanzadas"],
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["json", "csv", "excel", "pdf"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporte exportado exitosamente"
+          }
+        }
+      }
+    },
+    "/white-label/config": {
+      "get": {
+        "summary": "Obtener configuración de marca blanca",
+        "tags": ["Marca Blanca"],
+        "responses": {
+          "200": {
+            "description": "Configuración actual de marca blanca",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhiteLabelConfig"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar configuración de marca blanca",
+        "tags": ["Marca Blanca"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhiteLabelConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuración actualizada exitosamente"
+          }
+        }
+      }
+    },
+    "/white-label/domains": {
+      "get": {
+        "summary": "Obtener dominios personalizados",
+        "tags": ["Marca Blanca"],
+        "responses": {
+          "200": {
+            "description": "Lista de dominios personalizados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomDomain"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Configurar nuevo dominio personalizado",
+        "tags": ["Marca Blanca"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Dominio configurado exitosamente"
+          }
+        }
+      }
+    },
+    "/white-label/domains/{domain}/verify": {
+      "post": {
+        "summary": "Verificar dominio personalizado",
+        "tags": ["Marca Blanca"],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dominio verificado exitosamente"
+          }
+        }
+      }
+    },
+    "/enterprise/sla/metrics": {
+      "get": {
+        "summary": "Obtener métricas de SLA",
+        "tags": ["Enterprise - SLA"],
+        "responses": {
+          "200": {
+            "description": "Métricas actuales de SLA",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SLAMetrics"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/enterprise/sla/alerts": {
+      "get": {
+        "summary": "Obtener alertas de SLA",
+        "tags": ["Enterprise - SLA"],
+        "responses": {
+          "200": {
+            "description": "Lista de alertas de SLA"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear nueva alerta de SLA",
+        "tags": ["Enterprise - SLA"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metric": {
+                    "type": "string"
+                  },
+                  "threshold": {
+                    "type": "number"
+                  },
+                  "condition": {
+                    "type": "string",
+                    "enum": ["above", "below"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Alerta creada exitosamente"
+          }
+        }
+      }
+    },
+    "/enterprise/account/overview": {
+      "get": {
+        "summary": "Obtener resumen de cuenta Enterprise",
+        "tags": ["Enterprise - Gestión de Cuenta"],
+        "responses": {
+          "200": {
+            "description": "Resumen completo de la cuenta"
+          }
+        }
+      }
+    },
+    "/enterprise/account/team": {
+      "get": {
+        "summary": "Obtener miembros del equipo",
+        "tags": ["Enterprise - Gestión de Cuenta"],
+        "responses": {
+          "200": {
+            "description": "Lista de miembros del equipo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TeamMember"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/enterprise/account/team/invite": {
+      "post": {
+        "summary": "Invitar miembro al equipo",
+        "tags": ["Enterprise - Gestión de Cuenta"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["admin", "manager", "user", "viewer"]
+                  },
+                  "permissions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Invitación enviada exitosamente"
+          }
+        }
+      }
+    },
+    "/enterprise/reports/generate": {
+      "post": {
+        "summary": "Generar reporte Enterprise",
+        "tags": ["Enterprise - Reportes"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["sla_compliance", "account_usage", "team_activity", "security_audit", "performance_analysis"]
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": ["excel", "pdf", "csv", "json"]
+                  },
+                  "dateRange": {
+                    "type": "object",
+                    "properties": {
+                      "start": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "end": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reporte generado exitosamente"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Webhooks",
+      "description": "Gestión de webhooks personalizados"
+    },
+    {
+      "name": "Analíticas Avanzadas",
+      "description": "Reportes y analíticas avanzadas"
+    },
+    {
+      "name": "Marca Blanca",
+      "description": "Configuración de marca blanca y dominios personalizados"
+    },
+    {
+      "name": "Enterprise - SLA",
+      "description": "Monitoreo y gestión de SLA para cuentas Enterprise"
+    },
+    {
+      "name": "Enterprise - Gestión de Cuenta",
+      "description": "Gestión avanzada de cuentas y equipos Enterprise"
+    },
+    {
+      "name": "Enterprise - Reportes",
+      "description": "Generación de reportes empresariales avanzados"
+    }
+  ]
+}

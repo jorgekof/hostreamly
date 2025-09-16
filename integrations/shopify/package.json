@@ -1,0 +1,49 @@
+{
+  "name": "hostreamly-shopify-app",
+  "version": "1.0.0",
+  "description": "Aplicación de Shopify para integrar videos de Hostreamly en tiendas",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "shopify",
+    "video",
+    "hostreamly",
+    "ecommerce",
+    "integration"
+  ],
+  "author": "Hostreamly Team",
+  "license": "MIT",
+  "dependencies": {
+    "@shopify/shopify-api": "^7.5.0",
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0",
+    "eslint": "^8.52.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hostreamly/shopify-app"
+  },
+  "bugs": {
+    "url": "https://github.com/hostreamly/shopify-app/issues"
+  },
+  "homepage": "https://github.com/hostreamly/shopify-app#readme"
+}

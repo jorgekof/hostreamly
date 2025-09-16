@@ -1,0 +1,128 @@
+# Dockerignore para Hostreamly
+# Excluir archivos innecesarios del contexto de build
+
+# Dependencias
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.lockb
+
+# Archivos de desarrollo
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.docker
+
+# Logs
+logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Testing
+test-results
+playwright-report
+coverage
+.nyc_output
+
+# Build outputs
+dist
+build
+.next
+.nuxt
+
+# Uploads y archivos temporales
+uploads/temp/*
+*.db
+*.sqlite
+*.sqlite3
+
+# Scripts de deployment
+deploy-*.ps1
+deploy-*.sh
+setup-*.ps1
+setup-*.sh
+fix-*.ps1
+check-*.ps1
+test-*.ps1
+verificar-*.ps1
+diagnose-*.ps1
+connect-*.ps1
+create-*.ps1
+collect-*.html
+manual-*.md
+
+# Archivos de configuración específicos
+ecosystem.config.js
+netlify.toml
+vercel.json
+
+# Documentación
+*.md
+README*
+DOCS*
+CHANGELOG*
+LICENSE*
+
+# Archivos de VPS y SSH
+ssh-config-*.txt
+*.pem
+*.key
+plink.exe
+pscp.exe
+
+# Archivos de investigación y notas
+investigacion-*.md
+ACCION-*.md
+GUIA-*.md
+CONEXION-*.md
+DEPLOYMENT-*.md
+SECURITY-*.md
+USER-*.md
+BRAND-*.md
+API-*.md
+ENV-*.md
+
+# Templates
+templates
+
+# Integraciones (excluir del build principal)
+integrations
+
+# Archivos de configuración de herramientas
+.eslintrc*
+.prettierrc*
+.editorconfig
+jest.config.*
+playwright.config.*
+tailwind.config.*
+postcss.config.*
+vite.config.*
+tsconfig*.json
+components.json

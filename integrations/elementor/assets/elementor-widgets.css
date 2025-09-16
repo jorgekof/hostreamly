@@ -1,0 +1,715 @@
+/**
+ * Hostreamly Elementor Widgets Styles
+ * Custom styles for Elementor video widgets
+ * @version 2.0.0
+ */
+
+/* ==========================================================================
+   Base Widget Styles
+   ========================================================================== */
+
+.hostreamly-elementor-widget {
+    position: relative;
+    width: 100%;
+}
+
+.bunnyvault-elementor-widget * {
+    box-sizing: border-box;
+}
+
+/* Loading States */
+.bunnyvault-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.bunnyvault-loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e3e3e3;
+    border-top: 3px solid #007cba;
+    border-radius: 50%;
+    animation: bunnyvault-spin 1s linear infinite;
+}
+
+@keyframes bunnyvault-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error States */
+.bunnyvault-error {
+    padding: 20px;
+    background: #fff2f2;
+    border: 1px solid #ff6b6b;
+    border-radius: 8px;
+    color: #d63031;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Video Player Widget
+   ========================================================================== */
+
+.hostreamly-video-player {
+    position: relative;
+    width: 100%;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.bunnyvault-video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    background: #000;
+}
+
+.hostreamly-video-container video,
+.hostreamly-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.hostreamly-video-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.bunnyvault-video-poster.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.bunnyvault-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.bunnyvault-play-overlay:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hostreamly-play-button {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hostreamly-play-button:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.hostreamly-play-button i {
+    margin-left: 3px; /* Adjust play icon position */
+}
+
+/* Video Content */
+.bunnyvault-video-content {
+    padding: 20px;
+    background: #fff;
+}
+
+.bunnyvault-video-title {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333;
+}
+
+.bunnyvault-video-description {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* ==========================================================================
+   Video Gallery Widget
+   ========================================================================== */
+
+.hostreamly-video-gallery {
+    width: 100%;
+}
+
+.bunnyvault-gallery-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.bunnyvault-gallery-item {
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.bunnyvault-gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.bunnyvault-video-thumbnail {
+    position: relative;
+    width: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+.bunnyvault-video-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.bunnyvault-gallery-item:hover .bunnyvault-video-thumbnail img {
+    transform: scale(1.05);
+}
+
+.bunnyvault-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bunnyvault-gallery-item:hover .bunnyvault-video-overlay {
+    opacity: 1;
+}
+
+.bunnyvault-gallery-item .bunnyvault-play-button {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+}
+
+.bunnyvault-duration-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.bunnyvault-gallery-content {
+    padding: 15px;
+}
+
+.bunnyvault-gallery-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333;
+}
+
+.bunnyvault-gallery-description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+}
+
+/* Masonry Layout */
+.bunnyvault-video-gallery.masonry-layout .bunnyvault-gallery-grid {
+    column-count: 3;
+    column-gap: 20px;
+}
+
+.bunnyvault-video-gallery.masonry-layout .bunnyvault-gallery-item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+}
+
+/* Hover Animations */
+.bunnyvault-video-gallery.hover-zoom .bunnyvault-gallery-item:hover {
+    transform: scale(1.02);
+}
+
+.bunnyvault-video-gallery.hover-zoom-out .bunnyvault-gallery-item:hover {
+    transform: scale(0.98);
+}
+
+.bunnyvault-video-gallery.hover-slide-up .bunnyvault-gallery-item:hover {
+    transform: translateY(-10px);
+}
+
+.bunnyvault-video-gallery.hover-fade .bunnyvault-gallery-item:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Video Carousel Widget
+   ========================================================================== */
+
+.bunnyvault-video-carousel {
+    position: relative;
+    width: 100%;
+}
+
+.bunnyvault-carousel-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.bunnyvault-carousel-slide {
+    outline: none;
+}
+
+.bunnyvault-carousel-slide .slide-content {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.bunnyvault-carousel-slide:hover .slide-content {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.bunnyvault-carousel-content {
+    padding: 15px;
+}
+
+.bunnyvault-carousel-title {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333;
+}
+
+.bunnyvault-carousel-description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+}
+
+/* Navigation Arrows */
+.bunnyvault-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.bunnyvault-carousel-arrow:hover {
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bunnyvault-carousel-arrow.prev {
+    left: 15px;
+}
+
+.bunnyvault-carousel-arrow.next {
+    right: 15px;
+}
+
+.bunnyvault-video-carousel.arrows-outside {
+    margin: 0 60px;
+}
+
+.bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.prev {
+    left: -60px;
+}
+
+.bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.next {
+    right: -60px;
+}
+
+/* Navigation Dots */
+.bunnyvault-carousel-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    gap: 10px;
+}
+
+.bunnyvault-video-carousel.dots-top .bunnyvault-carousel-dots {
+    order: -1;
+}
+
+.bunnyvault-carousel-dot {
+    width: 12px;
+    height: 12px;
+    background: #ccc;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bunnyvault-carousel-dot:hover,
+.bunnyvault-carousel-dot.active {
+    background: #007cba;
+    transform: scale(1.2);
+}
+
+/* ==========================================================================
+   Lightbox Styles
+   ========================================================================== */
+
+.bunnyvault-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.bunnyvault-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bunnyvault-lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.bunnyvault-lightbox.active .bunnyvault-lightbox-content {
+    transform: scale(1);
+}
+
+.bunnyvault-lightbox-video {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+}
+
+.bunnyvault-lightbox-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bunnyvault-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .bunnyvault-gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+    
+    .bunnyvault-video-gallery.masonry-layout .bunnyvault-gallery-grid {
+        column-count: 2;
+    }
+    
+    .bunnyvault-play-button {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+    
+    .bunnyvault-carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bunnyvault-gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+    }
+    
+    .bunnyvault-video-gallery.masonry-layout .bunnyvault-gallery-grid {
+        column-count: 1;
+    }
+    
+    .bunnyvault-video-content {
+        padding: 15px;
+    }
+    
+    .bunnyvault-video-title {
+        font-size: 20px;
+    }
+    
+    .bunnyvault-video-description {
+        font-size: 14px;
+    }
+    
+    .bunnyvault-gallery-content {
+        padding: 12px;
+    }
+    
+    .bunnyvault-gallery-title {
+        font-size: 16px;
+    }
+    
+    .bunnyvault-carousel-content {
+        padding: 12px;
+    }
+    
+    .bunnyvault-carousel-title {
+        font-size: 14px;
+    }
+    
+    .bunnyvault-carousel-description {
+        font-size: 12px;
+    }
+    
+    .bunnyvault-play-button {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+    
+    .bunnyvault-carousel-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside {
+        margin: 0 45px;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.prev {
+        left: -45px;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.next {
+        right: -45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bunnyvault-gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bunnyvault-video-content {
+        padding: 12px;
+    }
+    
+    .bunnyvault-video-title {
+        font-size: 18px;
+    }
+    
+    .bunnyvault-gallery-content {
+        padding: 10px;
+    }
+    
+    .bunnyvault-carousel-content {
+        padding: 10px;
+    }
+    
+    .bunnyvault-lightbox-content {
+        max-width: 95%;
+        max-height: 95%;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside {
+        margin: 0;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.prev {
+        left: 10px;
+    }
+    
+    .bunnyvault-video-carousel.arrows-outside .bunnyvault-carousel-arrow.next {
+        right: 10px;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .bunnyvault-gallery-item,
+    .bunnyvault-carousel-slide .slide-content {
+        background: #2c2c2c;
+        color: #fff;
+    }
+    
+    .bunnyvault-video-content {
+        background: #2c2c2c;
+    }
+    
+    .bunnyvault-video-title,
+    .bunnyvault-gallery-title,
+    .bunnyvault-carousel-title {
+        color: #fff;
+    }
+    
+    .bunnyvault-video-description,
+    .bunnyvault-gallery-description,
+    .bunnyvault-carousel-description {
+        color: #ccc;
+    }
+    
+    .bunnyvault-loading {
+        background: #2c2c2c;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .bunnyvault-play-overlay,
+    .bunnyvault-carousel-arrow,
+    .bunnyvault-carousel-dots,
+    .bunnyvault-lightbox {
+        display: none !important;
+    }
+    
+    .bunnyvault-video-thumbnail img {
+        filter: grayscale(100%);
+    }
+}
+
+/* ==========================================================================
+   Accessibility Improvements
+   ========================================================================== */
+
+.bunnyvault-play-button:focus,
+.bunnyvault-carousel-arrow:focus,
+.bunnyvault-carousel-dot:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bunnyvault-gallery-item,
+    .bunnyvault-carousel-slide .slide-content,
+    .bunnyvault-play-button,
+    .bunnyvault-carousel-arrow,
+    .bunnyvault-carousel-dot,
+    .bunnyvault-lightbox,
+    .bunnyvault-lightbox-content {
+        transition: none;
+    }
+    
+    .bunnyvault-loading::after {
+        animation: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .bunnyvault-play-button {
+        background: #fff;
+        color: #000;
+        border: 2px solid #000;
+    }
+    
+    .bunnyvault-carousel-arrow {
+        background: #fff;
+        color: #000;
+        border: 2px solid #000;
+    }
+    
+    .bunnyvault-carousel-dot {
+        border: 2px solid #000;
+    }
+    
+    .bunnyvault-carousel-dot.active {
+        background: #000;
+    }
+}

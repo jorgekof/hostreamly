@@ -1,0 +1,288 @@
+/**
+ * Estilos para Hostreamly Video Player
+ * WordPress Plugin Styles
+ * @version 2.0.0
+ */
+
+/* Contenedor responsive */
+.hostreamly-responsive {
+    position: relative;
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    height: 0;
+    overflow: hidden;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hostreamly-responsive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.hostreamly-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+}
+
+/* Contenedor con dimensiones fijas */
+.hostreamly-fixed {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.hostreamly-fixed iframe {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.bunnyvault-fixed iframe:hover {
+    transform: scale(1.02);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .hostreamly-responsive {
+        margin: 15px 0;
+        border-radius: 8px;
+    }
+    
+    .hostreamly-responsive iframe {
+        border-radius: 8px;
+    }
+    
+    .hostreamly-fixed iframe {
+        border-radius: 8px;
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hostreamly-responsive {
+        margin: 10px 0;
+        border-radius: 6px;
+    }
+    
+    .hostreamly-responsive iframe {
+        border-radius: 6px;
+    }
+    
+    .hostreamly-fixed iframe {
+        border-radius: 6px;
+    }
+}
+
+/* Estilos para el botón del editor */
+.hostreamly-media-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+.hostreamly-media-button:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+.hostreamly-media-button .dashicons {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* Modal para insertar video */
+.hostreamly-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.hostreamly-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hostreamly-modal h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.hostreamly-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.hostreamly-modal input[type="text"],
+.hostreamly-modal input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.hostreamly-modal input[type="text"]:focus,
+.hostreamly-modal input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.hostreamly-modal .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.hostreamly-modal .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hostreamly-modal input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #667eea;
+}
+
+.hostreamly-modal .button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.hostreamly-modal .button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hostreamly-modal .button-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.hostreamly-modal .button-primary:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.hostreamly-modal .button-secondary {
+    background: #f8f9fa;
+    color: #666;
+    border: 2px solid #e1e5e9;
+}
+
+.hostreamly-modal .button-secondary:hover {
+    background: #e9ecef;
+    border-color: #ced4da;
+}
+
+.hostreamly-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.hostreamly-close:hover {
+    color: #333;
+}
+
+/* Loading state */
+.hostreamly-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.hostreamly-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Error state */
+.hostreamly-error {
+    background: #fee;
+    border: 2px solid #fcc;
+    color: #c33;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.hostreamly-error::before {
+    content: '⚠️ ';
+    font-size: 18px;
+    margin-right: 8px;
+}

@@ -1,0 +1,54 @@
+# Configuración de la aplicación de Shopify para Hostreamly
+# Este archivo define la configuración de la aplicación de Shopify
+
+name = "hostreamly-video-integration"
+client_id = "{{ SHOPIFY_API_KEY }}"
+application_url = "http://localhost:3001"
+embedded = true
+
+[access_scopes]
+# Permisos necesarios para la aplicación
+scopes = "read_products,write_products,read_content,write_content,read_themes,write_themes"
+
+[auth]
+redirect_urls = [
+  "http://localhost:3001/auth/callback"
+]
+
+[webhooks]
+# Webhooks para eventos de productos
+api_version = "2023-10"
+
+[[webhooks.subscriptions]]
+topic = "products/create"
+uri = "/webhooks/products/create"
+
+[[webhooks.subscriptions]]
+topic = "products/update"
+uri = "/webhooks/products/update"
+
+[[webhooks.subscriptions]]
+topic = "app/uninstalled"
+uri = "/webhooks/app/uninstalled"
+
+[pos]
+# Configuración para Point of Sale (opcional)
+embedded = false
+
+[build]
+# Configuración de construcción
+automatically_update_urls_on_dev = true
+dev_store_url = "https://your-dev-store.myshopify.com"
+include_config_on_deploy = true
+
+[app_proxy]
+# Configuración de proxy de aplicación (opcional)
+# url = "/apps/hostreamly"
+# subpath = "proxy"
+# prefix = "apps"
+
+# Configuraciones específicas de la aplicación
+[app_preferences]
+app_bridge_version = "3"
+use_legacy_auth = false
+use_session_tokens = true

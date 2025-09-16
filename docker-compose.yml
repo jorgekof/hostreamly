@@ -1,0 +1,132 @@
+# Docker Compose para desarrollo de Hostreamly
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:13-alpine
+    container_name: hostreamly-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hostreamly}
+      POSTGRES_USER: ${POSTGRES_USER:-hostreamly_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hostreamly_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - hostreamly-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hostreamly_user}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis para cache y sesiones
+  redis:
+    image: redis:7-alpine
+    container_name: hostreamly-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - hostreamly-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hostreamly-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-hostreamly}
+      DB_USER: ${POSTGRES_USER:-hostreamly_user}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-hostreamly_pass}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-hostreamly_user}:${POSTGRES_PASSWORD:-hostreamly_pass}@postgres:5432/${POSTGRES_DB:-hostreamly}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      BUNNY_API_KEY: ${BUNNY_API_KEY}
+      BUNNY_STREAM_API_KEY: ${BUNNY_STREAM_API_KEY}
+      BUNNY_CDN_API_KEY: ${BUNNY_CDN_API_KEY}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key}
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+      - ./backend/logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - hostreamly-network
+    command: npm run dev
+
+  # Frontend React/Vite
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: hostreamly-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:3001
+      VITE_BUNNY_CDN_URL: ${VITE_BUNNY_CDN_URL}
+      VITE_BUNNY_STREAM_URL: ${VITE_BUNNY_STREAM_URL}
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/backend
+    depends_on:
+      - backend
+    networks:
+      - hostreamly-network
+    command: npm run dev -- --host 0.0.0.0
+
+  # Nginx Proxy (opcional para producción)
+  nginx:
+    image: nginx:alpine
+    container_name: hostreamly-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - hostreamly-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  hostreamly-network:
+    driver: bridge
