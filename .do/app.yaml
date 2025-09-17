@@ -85,7 +85,10 @@ databases:
 static_sites:
   - name: hostreamly-frontend
     source_dir: /
-    source_dir: /
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
     build_command: npm run build
     environment_slug: node-js
     envs:
