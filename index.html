@@ -1,175 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hostreamly - Video Hosting Empresarial</title>
-    <meta name="description" content="Plataforma profesional de hosting de videos con CDN global, analytics avanzados y API completa" />
-    <meta name="author" content="Hostreamly.com" />
-    <meta name="keywords" content="video hosting, cdn, streaming, video player, escalable, hosting empresarial" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hostreamly - Plataforma de Video Streaming</title>
+    <meta name="description" content="Plataforma profesional de video streaming con CDN global, DRM y análisis avanzados" />
+    <meta name="keywords" content="video streaming, CDN, DRM, video hosting, plataforma video" />
     
-    <!-- Google Fonts - Tipografía Corporativa -->
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hostreamly.com/" />
+    <meta property="og:title" content="Hostreamly - Plataforma de Video Streaming" />
+    <meta property="og:description" content="Plataforma profesional de video streaming con CDN global, DRM y análisis avanzados" />
+    <meta property="og:image" content="/logo.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://hostreamly.com/" />
+    <meta property="twitter:title" content="Hostreamly - Plataforma de Video Streaming" />
+    <meta property="twitter:description" content="Plataforma profesional de video streaming con CDN global, DRM y análisis avanzados" />
+    <meta property="twitter:image" content="/logo.png" />
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
-
-    <meta property="og:title" content="Hostreamly.com - Video Hosting Empresarial" />
-    <meta property="og:description" content="Plataforma profesional de video hosting con CDN ultra rápido. Escalable, seguro y rentable." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/hostreamly-og-image.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@hostreamly" />
-    <meta name="twitter:image" content="/hostreamly-og-image.png" />
     
-    <!-- Ultimate CSS setProperty Error Prevention -->
-    <script>
-      (function() {
-        'use strict';
-        
-        // Backup original methods immediately
-        const originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
-        const originalGetPropertyValue = CSSStyleDeclaration.prototype.getPropertyValue;
-        const originalRemoveProperty = CSSStyleDeclaration.prototype.removeProperty;
-        
-        // Create bulletproof setProperty replacement
-        function safeSetProperty(property, value, priority) {
-          // Multiple safety checks
-          if (!this) {
-            console.warn('[CSS-POLYFILL] setProperty called with null/undefined context');
-            return;
-          }
-          
-          if (typeof this !== 'object') {
-            console.warn('[CSS-POLYFILL] setProperty called with invalid context type:', typeof this);
-            return;
-          }
-          
-          if (!this.style && !this.cssText) {
-            console.warn('[CSS-POLYFILL] setProperty called on object without style properties');
-            return;
-          }
-          
-          // Try multiple approaches
-          try {
-            // First attempt: use original method if available
-            if (typeof originalSetProperty === 'function') {
-              return originalSetProperty.call(this, property, value, priority);
-            }
-            
-            // Fallback 1: Direct style assignment
-            if (this.style && typeof this.style === 'object') {
-              const camelCase = property.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-              this.style[camelCase] = value;
-              return;
-            }
-            
-            // Fallback 2: cssText manipulation
-            if (typeof this.cssText === 'string') {
-              const regex = new RegExp(property + '\\s*:[^;]*;?', 'gi');
-              this.cssText = this.cssText.replace(regex, '');
-              this.cssText += property + ':' + value + (priority ? ' !' + priority : '') + ';';
-              return;
-            }
-            
-          } catch (error) {
-            console.warn('[CSS-POLYFILL] All setProperty methods failed, error handled silently:', error?.message);
-            return;
-          }
-        }
-        
-        // Replace setProperty with bulletproof version
-        Object.defineProperty(CSSStyleDeclaration.prototype, 'setProperty', {
-          value: safeSetProperty,
-          writable: true,
-          configurable: true,
-          enumerable: false
-        });
-        
-        // Also protect getPropertyValue and removeProperty
-        Object.defineProperty(CSSStyleDeclaration.prototype, 'getPropertyValue', {
-          value: function(property) {
-            if (!this || typeof this !== 'object') {
-              console.warn('[CSS-POLYFILL] getPropertyValue called with invalid context');
-              return '';
-            }
-            try {
-              return originalGetPropertyValue ? originalGetPropertyValue.call(this, property) : '';
-            } catch (error) {
-              console.warn('[CSS-POLYFILL] getPropertyValue error handled:', error?.message);
-              return '';
-            }
-          },
-          writable: true,
-          configurable: true
-        });
-        
-        Object.defineProperty(CSSStyleDeclaration.prototype, 'removeProperty', {
-          value: function(property) {
-            if (!this || typeof this !== 'object') {
-              console.warn('[CSS-POLYFILL] removeProperty called with invalid context');
-              return '';
-            }
-            try {
-              return originalRemoveProperty ? originalRemoveProperty.call(this, property) : '';
-            } catch (error) {
-              console.warn('[CSS-POLYFILL] removeProperty error handled:', error?.message);
-              return '';
-            }
-          },
-          writable: true,
-          configurable: true
-        });
-        
-        // Global error interceptors
-        const originalOnError = window.onerror;
-        window.onerror = function(message, source, lineno, colno, error) {
-          if (typeof message === 'string' && 
-              (message.includes('setProperty') || 
-               message.includes('Cannot read properties of undefined') ||
-               message.includes('eT.initialize'))) {
-            console.warn('[CSS-POLYFILL] Global error intercepted and handled:', message);
-            return true; // Prevent default error handling
-          }
-          return originalOnError ? originalOnError.call(this, message, source, lineno, colno, error) : false;
-        };
-        
-        // Unhandled promise rejection handler
-        window.addEventListener('unhandledrejection', function(event) {
-          if (event.reason && event.reason.message && 
-              (event.reason.message.includes('setProperty') ||
-               event.reason.message.includes('Cannot read properties of undefined') ||
-               event.reason.message.includes('eT.initialize'))) {
-            console.warn('[CSS-POLYFILL] Promise rejection intercepted and handled:', event.reason.message);
-            event.preventDefault();
-            return false;
-          }
-        });
-        
-        // Error event listener
-        window.addEventListener('error', function(event) {
-          if (event.error && event.error.message && 
-              (event.error.message.includes('setProperty') ||
-               event.error.message.includes('Cannot read properties of undefined') ||
-               event.error.message.includes('eT.initialize'))) {
-            console.warn('[CSS-POLYFILL] Error event intercepted and handled:', event.error.message);
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-          }
-        }, true); // Use capture phase
-        
-        console.log('🛡️ Ultimate CSS setProperty protection system activated');
-      })();
-    </script>
+    <!-- Critical CSS will be inlined here by Vite -->
   </head>
-
   <body>
     <div id="root"></div>
-    
-    <!-- Early debugging script - loads before everything else -->
-    <script src="/debug-early.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

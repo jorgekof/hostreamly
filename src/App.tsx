@@ -36,24 +36,10 @@ const queryClient = new QueryClient();
 
 function App() {
   useEffect(() => {
-    // Initialize CSS polyfill for older browsers
-    if (typeof window !== 'undefined' && !window.CSS?.supports?.('color', 'oklch(0.5 0.2 180)')) {
-      import('@/lib/css-polyfill').then(({ initCSSPolyfill }) => {
-        initCSSPolyfill();
-      });
+    // Initialize performance monitoring
+    if (typeof window !== 'undefined') {
+      console.log('🚀 Hostreamly App initialized');
     }
-
-    // Initialize debug helpers in development
-    if (import.meta.env.DEV) {
-      import('@/lib/debug').then(({ initDebugHelpers }) => {
-        initDebugHelpers();
-      });
-    }
-
-    // Cleanup function
-    return () => {
-      // Cleanup any global event listeners or intervals here
-    };
   }, []);
 
   return (
