@@ -4,18 +4,15 @@ services:
   # Backend API Service
   - name: backend-api
     source_dir: /backend
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
     run_command: npm start
     environment_slug: node-js
     instance_count: 1
     instance_size_slug: basic-xxs
     http_port: 8080
-    health_check:
-      http_path: /health
-      initial_delay_seconds: 30
-      period_seconds: 10
-      timeout_seconds: 5
-      failure_threshold: 3
-      success_threshold: 1
     
     # Environment Variables for Backend
     envs:
@@ -69,7 +66,7 @@ services:
       success_threshold: 1
       failure_threshold: 3
 
-  # Routes configuration for backend
+    # Routes configuration for backend
     routes:
       - path: /api
         preserve_path_prefix: true

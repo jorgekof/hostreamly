@@ -4,7 +4,7 @@ services:
   source_dir: /backend
   github:
     repo: jorgekof/hostreamly
-    branch: master
+    branch: main
     deploy_on_push: true
   run_command: npm start
   environment_slug: node-js

@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 const crypto = require('crypto');
 const { Video, User } = require('../models');
 const { authMiddleware: auth, requirePremium, validateInput, enhancedRateLimit } = require('../middleware/auth');
-const bunnyService = require('../services/BunnyService');
+const bunnyService = require('../services/BunnyMultiLibraryService');
 const videoCacheService = require('../services/videoCacheService');
 const { cache } = require('../config/redis');
 const logger = require('../utils/logger');
@@ -262,14 +262,20 @@ router.post('/upload',
         throw new ValidationError('Premium visibility requires premium subscription');
       }
       
-      // Upload to Bunny Stream
+      // Upload to Bunny Stream using Multi-Library Service
       logger.bunny('video_upload_started', 'info', {
         userId: req.user.id,
         filename: req.file.originalname,
         size: req.file.size
       });
       
-      const bunnyVideo = await bunnyService.createVideo(title, process.env.BUNNY_STREAM_COLLECTION_ID);
+      // Assign user to library and create user video with collection
+      const bunnyVideo = await bunnyService.createUserVideo(req.user.id, title, {
+        description,
+        originalFilename: req.file.originalname,
+        fileSize: req.file.size,
+        mimeType: req.file.mimetype
+      });
       
       // Upload file to Bunny Stream
       const uploadResult = await bunnyService.uploadVideo(
@@ -289,8 +295,8 @@ router.post('/upload',
         description,
         slug: null, // Will be generated in beforeCreate hook
         bunny_video_id: bunnyVideo.guid,
-        bunny_library_id: bunnyVideo.videoLibraryId,
-        bunny_collection_id: process.env.BUNNY_STREAM_COLLECTION_ID,
+        bunny_library_id: bunnyVideo.libraryId,
+        bunny_collection_id: bunnyVideo.collectionId,
         original_filename: req.file.originalname,
         file_size: req.file.size,
         mime_type: req.file.mimetype,
