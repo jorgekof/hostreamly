@@ -1,0 +1,39 @@
+# DigitalOcean App Platform Configuration for Hostreamly Frontend
+name: hostreamly-frontend
+
+# Static Sites Configuration
+static_sites:
+  - name: hostreamly-frontend
+    source_dir: /
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    build_command: |
+      npm install
+      npm run build
+    environment_slug: node-js
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_NODE_ENV
+        value: "production"
+      - key: VITE_DEBUG_MODE
+        value: "false"
+      - key: VITE_API_BASE_URL
+        value: "https://hostreamly-backend-5exrb.ondigitalocean.app"
+      - key: VITE_WEBSOCKET_URL
+        value: "wss://hostreamly-backend-5exrb.ondigitalocean.app"
+      - key: VITE_APP_BASE_URL
+        value: "https://hostreamly-frontend.ondigitalocean.app"
+      - key: VITE_BUNNY_CDN_URL
+        value: "https://hostreamly.b-cdn.net"
+      - key: VITE_DO_SPACES_URL
+        value: "https://hostreamly.sfo3.digitaloceanspaces.com"
+    
+    routes:
+      - path: /
+        preserve_path_prefix: false
+    
+    # Configuración de rutas para SPA
+    catchall_document: index.html

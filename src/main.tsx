@@ -1,6 +1,4 @@
-// Initialize CSS polyfill FIRST, before any other imports
-import { initializeCSSPolyfill } from './utils/css-polyfill'
-initializeCSSPolyfill()
+// CSS polyfill removed for stability
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
