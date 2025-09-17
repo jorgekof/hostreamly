@@ -25,13 +25,6 @@ import { ProtectedRoute } from "./components/ProtectedRoute"
 import { useEffect } from "react";
 import "./App.css"
 
-// CSS polyfill for older browsers
-if (typeof window !== 'undefined' && !window.CSS?.supports?.('color', 'oklch(0.5 0.2 180)')) {
-  import('@/lib/css-polyfill').then(({ initCSSPolyfill }) => {
-    initCSSPolyfill();
-  });
-}
-
 const queryClient = new QueryClient();
 
 function App() {
