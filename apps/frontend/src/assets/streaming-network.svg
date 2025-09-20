@@ -1,0 +1,75 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#f8fafc"/>
+  
+  <!-- Global Network Lines -->
+  <path d="M50 150 Q200 50 350 150" stroke="#64748b" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M50 150 Q200 250 350 150" stroke="#64748b" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M100 80 Q200 120 300 80" stroke="#64748b" stroke-width="1.5" fill="none" opacity="0.2"/>
+  <path d="M100 220 Q200 180 300 220" stroke="#64748b" stroke-width="1.5" fill="none" opacity="0.2"/>
+  
+  <!-- Central Hub -->
+  <circle cx="200" cy="150" r="25" fill="#475569" stroke="#334155" stroke-width="3"/>
+  <circle cx="200" cy="150" r="15" fill="#64748b"/>
+  <circle cx="200" cy="150" r="8" fill="#94a3b8"/>
+  
+  <!-- Server Nodes -->
+  <!-- Left Servers -->
+  <rect x="40" y="140" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="45" y="145" width="10" height="2" fill="#94a3b8"/>
+  <rect x="45" y="148" width="10" height="2" fill="#94a3b8"/>
+  <rect x="45" y="151" width="10" height="2" fill="#94a3b8"/>
+  
+  <rect x="80" y="70" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="85" y="75" width="10" height="2" fill="#94a3b8"/>
+  <rect x="85" y="78" width="10" height="2" fill="#94a3b8"/>
+  <rect x="85" y="81" width="10" height="2" fill="#94a3b8"/>
+  
+  <rect x="80" y="210" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="85" y="215" width="10" height="2" fill="#94a3b8"/>
+  <rect x="85" y="218" width="10" height="2" fill="#94a3b8"/>
+  <rect x="85" y="221" width="10" height="2" fill="#94a3b8"/>
+  
+  <!-- Right Servers -->
+  <rect x="340" y="140" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="345" y="145" width="10" height="2" fill="#94a3b8"/>
+  <rect x="345" y="148" width="10" height="2" fill="#94a3b8"/>
+  <rect x="345" y="151" width="10" height="2" fill="#94a3b8"/>
+  
+  <rect x="300" y="70" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="305" y="75" width="10" height="2" fill="#94a3b8"/>
+  <rect x="305" y="78" width="10" height="2" fill="#94a3b8"/>
+  <rect x="305" y="81" width="10" height="2" fill="#94a3b8"/>
+  
+  <rect x="300" y="210" width="20" height="20" rx="3" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <rect x="305" y="215" width="10" height="2" fill="#94a3b8"/>
+  <rect x="305" y="218" width="10" height="2" fill="#94a3b8"/>
+  <rect x="305" y="221" width="10" height="2" fill="#94a3b8"/>
+  
+  <!-- Connection Lines -->
+  <line x1="60" y1="150" x2="175" y2="150" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  <line x1="100" y1="80" x2="180" y2="135" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  <line x1="100" y1="220" x2="180" y2="165" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  
+  <line x1="225" y1="150" x2="340" y2="150" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  <line x1="220" y1="135" x2="300" y2="80" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  <line x1="220" y1="165" x2="300" y2="220" stroke="#64748b" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Data Flow Indicators -->
+  <circle cx="120" cy="150" r="3" fill="#64748b" opacity="0.8">
+    <animate attributeName="cx" values="120;160;120" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="280" cy="150" r="3" fill="#64748b" opacity="0.8">
+    <animate attributeName="cx" values="280;240;280" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Signal Waves -->
+  <circle cx="200" cy="150" r="30" fill="none" stroke="#64748b" stroke-width="1" opacity="0.4">
+    <animate attributeName="r" values="30;50;30" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="200" cy="150" r="40" fill="none" stroke="#64748b" stroke-width="1" opacity="0.2">
+    <animate attributeName="r" values="40;60;40" dur="3s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="opacity" values="0.2;0;0.2" dur="3s" repeatCount="indefinite" begin="1s"/>
+  </circle>
+</svg>

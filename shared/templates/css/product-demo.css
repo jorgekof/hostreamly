@@ -1,0 +1,617 @@
+/* Product Demo Template Styles */
+
+.hostreamly-product-demo {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-sizing: border-box;
+}
+
+.hostreamly-product-demo.sidebar-left {
+    flex-direction: row;
+}
+
+.hostreamly-product-demo.sidebar-right {
+    flex-direction: row-reverse;
+}
+
+.hostreamly-product-demo .demo-video-section {
+    flex: 1;
+    position: relative;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.hostreamly-product-demo .demo-video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.hostreamly-product-demo .demo-video-container.aspect-4-3 {
+    aspect-ratio: 4/3;
+}
+
+.hostreamly-product-demo .demo-video-container.aspect-1-1 {
+    aspect-ratio: 1/1;
+}
+
+.hostreamly-product-demo .demo-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hostreamly-product-demo .demo-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.3), transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hostreamly-product-demo .demo-video-container:hover .demo-video-overlay {
+    opacity: 1;
+}
+
+.hostreamly-product-demo .demo-play-button {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.hostreamly-product-demo .demo-play-button:hover {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+.hostreamly-product-demo .demo-play-button::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 20px solid #007cba;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
+}
+
+.hostreamly-product-demo .demo-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 5;
+}
+
+.hostreamly-product-demo .demo-progress-fill {
+    height: 100%;
+    background: #007cba;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.hostreamly-product-demo .demo-content-section {
+    flex: 0 0 400px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+}
+
+.hostreamly-product-demo .demo-header {
+    margin-bottom: 32px;
+}
+
+.hostreamly-product-demo .demo-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+}
+
+.hostreamly-product-demo .demo-subtitle {
+    font-size: 1.1rem;
+    color: rgba(51, 51, 51, 0.7);
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+}
+
+.hostreamly-product-demo .demo-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--hostreamly-accent-color, #007cba);
+    margin: 0 0 24px 0;
+}
+
+.hostreamly-product-demo .demo-price.sale {
+    color: #e74c3c;
+}
+
+.hostreamly-product-demo .demo-price .original-price {
+    text-decoration: line-through;
+    color: var(--hostreamly-text-color, #333333);
+    opacity: 0.5;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-right: 12px;
+}
+
+.hostreamly-product-demo .demo-features {
+    margin-bottom: 32px;
+}
+
+.hostreamly-product-demo .demo-features-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 16px 0;
+}
+
+.hostreamly-product-demo .demo-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hostreamly-product-demo .demo-features-list.checklist li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.hostreamly-product-demo .demo-features-list.checklist li::before {
+    content: '✓';
+    color: #007cba;
+    font-weight: bold;
+    margin-right: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.hostreamly-product-demo .demo-features-list.bullets li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.hostreamly-product-demo .demo-features-list.bullets li::before {
+    content: '•';
+    color: #007cba;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.hostreamly-product-demo .demo-specifications {
+    margin-bottom: 32px;
+}
+
+.hostreamly-product-demo .demo-specifications-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 16px 0;
+}
+
+.hostreamly-product-demo .demo-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.hostreamly-product-demo .demo-specs-table tr {
+    border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+}
+
+.hostreamly-product-demo .demo-specs-table tr:last-child {
+    border-bottom: none;
+}
+
+.hostreamly-product-demo .demo-specs-table td {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    vertical-align: top;
+}
+
+.hostreamly-product-demo .demo-specs-table td:first-child {
+    font-weight: 500;
+    color: rgba(51, 51, 51, 0.7);
+    width: 40%;
+}
+
+.hostreamly-product-demo .demo-specs-table td:last-child {
+    color: #333;
+    text-align: right;
+}
+
+.hostreamly-product-demo .demo-rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.hostreamly-product-demo .demo-rating .stars {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.hostreamly-product-demo .demo-rating .rating-text {
+    font-size: 0.9rem;
+    color: rgba(51, 51, 51, 0.7);
+}
+
+.hostreamly-product-demo .demo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hostreamly-product-demo .demo-add-to-cart {
+    background: #007cba;
+    color: #fff;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.hostreamly-product-demo .demo-add-to-cart:hover {
+    background: #005a87;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hostreamly-product-demo .demo-secondary-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.hostreamly-product-demo .demo-wishlist,
+.hostreamly-product-demo .demo-compare,
+.hostreamly-product-demo .demo-share {
+    flex: 1;
+    background: transparent;
+    color: #333;
+    border: 2px solid rgba(51, 51, 51, 0.2);
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.hostreamly-product-demo .demo-wishlist:hover,
+.hostreamly-product-demo .demo-compare:hover,
+.hostreamly-product-demo .demo-share:hover {
+    background: rgba(51, 51, 51, 0.05);
+    border-color: rgba(51, 51, 51, 0.3);
+}
+
+.hostreamly-product-demo .demo-chapters {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.hostreamly-product-demo .demo-chapter {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.hostreamly-product-demo .demo-chapter:hover,
+.hostreamly-product-demo .demo-chapter.active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.hostreamly-product-demo .demo-chapter.completed {
+    background: #007cba;
+}
+
+/* Animation Classes */
+.hostreamly-product-demo.slide-in {
+    animation: slideIn 0.8s ease-out;
+}
+
+.hostreamly-product-demo.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hostreamly-product-demo .demo-content-section {
+        flex: 1;
+        padding: 0;
+    }
+    
+    .hostreamly-product-demo .demo-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    
+    .hostreamly-product-demo .demo-price {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hostreamly-product-demo {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    
+    .hostreamly-product-demo.sidebar-right {
+        flex-direction: column;
+    }
+    
+    .hostreamly-product-demo .demo-video-section {
+        min-height: 300px;
+        order: 1;
+    }
+    
+    .hostreamly-product-demo .demo-content-section {
+        flex: none;
+        padding: 24px;
+        order: 2;
+    }
+    
+    .hostreamly-product-demo .demo-title {
+        font-size: 1.25rem;
+    }
+    
+    .hostreamly-product-demo .demo-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hostreamly-product-demo .demo-price {
+        font-size: 1.2rem;
+    }
+    
+    .hostreamly-product-demo .demo-chapters {
+        position: static;
+        margin-top: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .hostreamly-product-demo .demo-chapter {
+        flex: none;
+        min-width: 80px;
+    }
+    
+    .hostreamly-product-demo .demo-secondary-actions {
+        flex-direction: column;
+    }
+    
+    .hostreamly-product-demo .demo-wishlist,
+    .hostreamly-product-demo .demo-compare,
+    .hostreamly-product-demo .demo-share {
+        flex: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hostreamly-product-demo {
+        margin: 0 8px;
+        border-radius: 8px;
+    }
+    
+    .hostreamly-product-demo .demo-content-section {
+        padding: 20px;
+    }
+    
+    .hostreamly-product-demo .demo-title {
+        font-size: 1.1rem;
+    }
+    
+    .hostreamly-product-demo .demo-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hostreamly-product-demo .demo-features-list.checklist li,
+    .hostreamly-product-demo .demo-features-list.bullets li {
+        font-size: 0.85rem;
+    }
+    
+    .hostreamly-product-demo .demo-specs-table td {
+        font-size: 0.8rem;
+        padding: 6px 0;
+    }
+    
+    .hostreamly-product-demo .demo-play-button {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .hostreamly-product-demo .demo-play-button::after {
+        border-left-width: 15px;
+        border-top-width: 9px;
+        border-bottom-width: 9px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .hostreamly-product-demo {
+        background: #1a1a1a;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hostreamly-product-demo .demo-content-section {
+        background: #1a1a1a;
+    }
+    
+    .hostreamly-product-demo .demo-specs-table tr {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .hostreamly-product-demo .demo-wishlist,
+    .hostreamly-product-demo .demo-compare,
+    .hostreamly-product-demo .demo-share {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .hostreamly-product-demo .demo-wishlist:hover,
+    .hostreamly-product-demo .demo-compare:hover,
+    .hostreamly-product-demo .demo-share:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .hostreamly-product-demo {
+        border: 3px solid #000;
+    }
+    
+    .hostreamly-product-demo .demo-video-overlay {
+        background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .hostreamly-product-demo .demo-add-to-cart,
+    .hostreamly-product-demo .demo-wishlist,
+    .hostreamly-product-demo .demo-compare,
+    .hostreamly-product-demo .demo-share {
+        border-width: 3px;
+    }
+    
+    .hostreamly-product-demo .demo-specs-table tr {
+        border-bottom-width: 2px;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .hostreamly-product-demo,
+    .hostreamly-product-demo .demo-video-overlay,
+    .hostreamly-product-demo .demo-play-button,
+    .hostreamly-product-demo .demo-progress-fill,
+    .hostreamly-product-demo .demo-add-to-cart,
+    .hostreamly-product-demo .demo-wishlist,
+    .hostreamly-product-demo .demo-compare,
+    .hostreamly-product-demo .demo-share,
+    .hostreamly-product-demo .demo-chapter {
+        transition: none;
+    }
+    
+    .hostreamly-product-demo.slide-in,
+    .hostreamly-product-demo.fade-in {
+        animation: none;
+    }
+    
+    .hostreamly-product-demo .demo-play-button:hover {
+        transform: none;
+    }
+    
+    .hostreamly-product-demo .demo-add-to-cart:hover {
+        transform: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .hostreamly-product-demo {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .hostreamly-product-demo .demo-video-overlay,
+    .hostreamly-product-demo .demo-play-button,
+    .hostreamly-product-demo .demo-chapters,
+    .hostreamly-product-demo .demo-actions {
+        display: none;
+    }
+    
+    .hostreamly-product-demo .demo-video-section {
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hostreamly-product-demo .demo-video-section::after {
+        content: 'Video Preview';
+        color: #666;
+        font-size: 1.2rem;
+    }
+}

@@ -1,0 +1,32 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#bgGradient)"/>
+  
+  <!-- Letter H stylized -->
+  <g fill="url(#iconGradient)">
+    <!-- Left vertical bar -->
+    <rect x="8" y="7" width="3" height="18" rx="1.5"/>
+    <!-- Right vertical bar -->
+    <rect x="21" y="7" width="3" height="18" rx="1.5"/>
+    <!-- Horizontal connecting bar -->
+    <rect x="8" y="14.5" width="16" height="3" rx="1.5"/>
+    
+    <!-- Play button triangle overlay (representing streaming) -->
+    <path d="M13 11 L13 21 L20 16 Z" fill="url(#iconGradient)" opacity="0.8"/>
+  </g>
+  
+  <!-- Subtle glow effect -->
+  <rect width="32" height="32" rx="6" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+</svg>

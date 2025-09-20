@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Contacto - Hostreamly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .form-description {
+            color: #718096;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background: #ebf4ff;
+        }
+        
+        .file-upload-icon {
+            font-size: 48px;
+            color: #a0aec0;
+            margin-bottom: 16px;
+        }
+        
+        .file-upload-text {
+            color: #4a5568;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .file-upload-hint {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-selected {
+            background: #f0fff4;
+            border-color: #38a169;
+            color: #38a169;
+        }
+        
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            color: #38a169;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            color: #e53e3e;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            .form-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title" id="formTitle">Formulario de Contacto</h1>
+            <p class="form-description" id="formDescription">Completa el formulario y nos pondremos en contacto contigo.</p>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            ¡Gracias! Tu mensaje ha sido enviado exitosamente.
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            Hubo un error al enviar el formulario. Por favor, inténtalo de nuevo.
+        </div>
+        
+        <form id="contactForm" enctype="multipart/form-data">
+            <!-- Los campos se generarán dinámicamente aquí -->
+            <div id="formFields"></div>
+            
+            <!-- Campo de video (si está habilitado) -->
+            <div class="form-group" id="videoUploadGroup" style="display: none;">
+                <label class="form-label">Video adjunto (opcional)</label>
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="file-upload-icon">📹</div>
+                    <div class="file-upload-text">Arrastra un video aquí o haz clic para seleccionar</div>
+                    <div class="file-upload-hint">Formatos soportados: MP4, AVI, MOV, WMV, WebM (máx. 100MB)</div>
+                    <input type="file" name="video" id="videoInput" class="file-input" accept="video/*">
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-button" id="submitButton">
+                <span class="loading-spinner" id="loadingSpinner"></span>
+                <span id="submitText">Enviar mensaje</span>
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        // Configuración del formulario (se inyectará desde el servidor)
+        let formConfig = {
+            id: 'example-form-id',
+            title: 'Formulario de Contacto',
+            description: 'Completa el formulario y nos pondremos en contacto contigo.',
+            fields: [
+                {
+                    name: 'name',
+                    label: 'Nombre completo',
+                    type: 'text',
+                    required: true,
+                    placeholder: 'Tu nombre completo'
+                },
+                {
+                    name: 'email',
+                    label: 'Correo electrónico',
+                    type: 'email',
+                    required: true,
+                    placeholder: 'tu@email.com'
+                },
+                {
+                    name: 'subject',
+                    label: 'Asunto',
+                    type: 'select',
+                    required: true,
+                    options: [
+                        { value: '', label: 'Selecciona un asunto' },
+                        { value: 'general', label: 'Consulta general' },
+                        { value: 'support', label: 'Soporte técnico' },
+                        { value: 'sales', label: 'Ventas' },
+                        { value: 'other', label: 'Otro' }
+                    ]
+                },
+                {
+                    name: 'message',
+                    label: 'Mensaje',
+                    type: 'textarea',
+                    required: true,
+                    placeholder: 'Escribe tu mensaje aquí...'
+                }
+            ],
+            video_upload_enabled: true,
+            success_message: '¡Gracias! Tu mensaje ha sido enviado exitosamente.',
+            custom_css: ''
+        };
+        
+        // Inicializar formulario
+        function initializeForm() {
+            // Actualizar título y descripción
+            document.getElementById('formTitle').textContent = formConfig.title;
+            document.getElementById('formDescription').textContent = formConfig.description;
+            
+            // Generar campos
+            const fieldsContainer = document.getElementById('formFields');
+            fieldsContainer.innerHTML = '';
+            
+            formConfig.fields.forEach(field => {
+                const fieldGroup = createFormField(field);
+                fieldsContainer.appendChild(fieldGroup);
+            });
+            
+            // Mostrar upload de video si está habilitado
+            if (formConfig.video_upload_enabled) {
+                document.getElementById('videoUploadGroup').style.display = 'block';
+            }
+            
+            // Aplicar CSS personalizado
+            if (formConfig.custom_css) {
+                const style = document.createElement('style');
+                style.textContent = formConfig.custom_css;
+                document.head.appendChild(style);
+            }
+        }
+        
+        // Crear campo de formulario
+        function createFormField(field) {
+            const group = document.createElement('div');
+            group.className = 'form-group';
+            
+            const label = document.createElement('label');
+            label.className = 'form-label';
+            label.textContent = field.label;
+            if (field.required) {
+                label.innerHTML += ' <span class="required">*</span>';
+            }
+            
+            let input;
+            
+            switch (field.type) {
+                case 'textarea':
+                    input = document.createElement('textarea');
+                    input.className = 'form-textarea';
+                    break;
+                case 'select':
+                    input = document.createElement('select');
+                    input.className = 'form-select';
+                    field.options.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.value;
+                        optionElement.textContent = option.label;
+                        input.appendChild(optionElement);
+                    });
+                    break;
+                default:
+                    input = document.createElement('input');
+                    input.type = field.type;
+                    input.className = 'form-input';
+            }
+            
+            input.name = field.name;
+            input.required = field.required;
+            if (field.placeholder) {
+                input.placeholder = field.placeholder;
+            }
+            
+            group.appendChild(label);
+            group.appendChild(input);
+            
+            return group;
+        }
+        
+        // Manejar drag & drop para videos
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('videoInput');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    updateFileDisplay(files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    updateFileDisplay(e.target.files[0]);
+                }
+            });
+        }
+        
+        // Actualizar display del archivo seleccionado
+        function updateFileDisplay(file) {
+            const uploadArea = document.getElementById('fileUploadArea');
+            uploadArea.classList.add('file-selected');
+            uploadArea.innerHTML = `
+                <div class="file-upload-icon">✅</div>
+                <div class="file-upload-text">Archivo seleccionado: ${file.name}</div>
+                <div class="file-upload-hint">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+            `;
+        }
+        
+        // Manejar envío del formulario
+        function setupFormSubmission() {
+            const form = document.getElementById('contactForm');
+            const submitButton = document.getElementById('submitButton');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitText = document.getElementById('submitText');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Mostrar loading
+                submitButton.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
+                submitText.textContent = 'Enviando...';
+                
+                // Ocultar mensajes previos
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                try {
+                    const formData = new FormData();
+                    
+                    // Recopilar datos del formulario
+                    const submissionData = {};
+                    formConfig.fields.forEach(field => {
+                        const input = form.querySelector(`[name="${field.name}"]`);
+                        if (input) {
+                            submissionData[field.name] = input.value;
+                        }
+                    });
+                    
+                    formData.append('submission_data', JSON.stringify(submissionData));
+                    
+                    // Agregar video si existe
+                    const videoInput = document.getElementById('videoInput');
+                    if (videoInput.files.length > 0) {
+                        formData.append('video', videoInput.files[0]);
+                    }
+                    
+                    // Enviar formulario
+                    const response = await fetch(`/api/contact/submit/${formConfig.id}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        successMessage.textContent = result.message || formConfig.success_message;
+                        successMessage.style.display = 'block';
+                        form.reset();
+                        
+                        // Redireccionar si está configurado
+                        if (result.data.redirect_url) {
+                            setTimeout(() => {
+                                window.location.href = result.data.redirect_url;
+                            }, 2000);
+                        }
+                    } else {
+                        throw new Error(result.message || 'Error al enviar el formulario');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorMessage.textContent = error.message;
+                    errorMessage.style.display = 'block';
+                } finally {
+                    // Ocultar loading
+                    submitButton.disabled = false;
+                    loadingSpinner.style.display = 'none';
+                    submitText.textContent = 'Enviar mensaje';
+                }
+            });
+        }
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeForm();
+            setupFileUpload();
+            setupFormSubmission();
+        });
+        
+        // Función para cargar configuración desde el servidor (se llamará externamente)
+        function loadFormConfig(config) {
+            formConfig = { ...formConfig, ...config };
+            initializeForm();
+        }
+    </script>
+</body>
+</html>
