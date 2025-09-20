@@ -1,11 +1,13 @@
 name: hostreamly-static
 static_sites:
 - name: hostreamly-frontend
-  source_dir: apps/frontend/dist
+  source_dir: apps/frontend
   github:
     repo: jorgekof/hostreamly
     branch: main
     deploy_on_push: true
+  build_command: npm ci --include=dev && npm run build
+  output_dir: dist
   environment_slug: html
   routes:
   - path: /
