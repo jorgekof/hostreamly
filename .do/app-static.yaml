@@ -1,0 +1,25 @@
+name: hostreamly-static
+static_sites:
+- name: hostreamly-frontend
+  source_dir: apps/frontend/dist
+  github:
+    repo: jorgekof/hostreamly
+    branch: main
+    deploy_on_push: true
+  environment_slug: html
+  routes:
+  - path: /
+  catchall_document: index.html
+  envs:
+  - key: NODE_ENV
+    value: production
+    type: GENERAL
+  - key: VITE_NODE_ENV
+    value: production
+    type: GENERAL
+  - key: VITE_API_BASE_URL
+    value: https://api.hostreamly.com
+    type: GENERAL
+  - key: VITE_BUNNY_CDN_URL
+    value: https://hostreamly.b-cdn.net
+    type: GENERAL
