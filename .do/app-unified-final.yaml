@@ -9,27 +9,24 @@ services:
       branch: main
       deploy_on_push: true
     build_command: |
-      # Instalar dependencias del frontend
       npm install
-      # Construir el frontend
       npm run build
-      # Instalar dependencias del backend
       cd backend
       npm install
     run_command: |
       cd backend
-      npm start
+      node server.js
     environment_slug: node-js
     instance_count: 1
     instance_size_slug: basic-xxs
-    http_port: 8080
+    http_port: 3000
     
     # Variables de entorno
     envs:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: "8080"
+        value: "3000"
       - key: JWT_SECRET
         value: "hostreamly-unified-jwt-secret-2024"
       - key: VITE_API_BASE_URL
