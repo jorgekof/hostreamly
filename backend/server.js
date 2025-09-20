@@ -100,8 +100,8 @@ app.use(performanceLogger);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Servir archivos estáticos del frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Servir archivos estáticos del frontend (dist después del build)
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Datos de ejemplo en memoria
 let users = [
@@ -180,8 +180,16 @@ app.use('/api/*', (req, res) => {
     });
 });
 
-// NO incluir catch-all para frontend aquí
-// El frontend debe ser servido por el servidor web (Nginx/Apache) o por Vite en desarrollo
+// Catch-all handler para SPA - debe servir index.html para todas las rutas no-API
+app.get('*', (req, res) => {
+    // No aplicar catch-all a rutas de API
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    
+    // Servir index.html para todas las demás rutas (SPA routing)
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
 // Error handling middlewares (must be last)
 app.use(errorLogger);

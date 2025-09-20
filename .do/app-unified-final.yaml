@@ -1,0 +1,40 @@
+# DigitalOcean App Platform - Aplicación Unificada Final
+name: hostreamly-unified
+services:
+  # Servicio único que maneja frontend y backend
+  - name: app
+    source_dir: /
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    build_command: |
+      # Instalar dependencias del frontend
+      npm install
+      # Construir el frontend
+      npm run build
+      # Instalar dependencias del backend
+      cd backend
+      npm install
+    run_command: |
+      cd backend
+      npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    http_port: 8080
+    
+    # Variables de entorno
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: JWT_SECRET
+        value: "hostreamly-unified-jwt-secret-2024"
+      - key: VITE_API_BASE_URL
+        value: "/api"
+      - key: VITE_APP_BASE_URL
+        value: ""
+      - key: VITE_WEBSOCKET_URL
+        value: ""

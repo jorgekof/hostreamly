@@ -1,0 +1,47 @@
+# DigitalOcean App Platform - Configuración Simplificada
+name: hostreamly-simple
+services:
+  # Backend API Service
+  - name: backend
+    source_dir: /backend
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    build_command: npm install
+    run_command: npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    http_port: 8080
+    
+    # Variables de entorno mínimas
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: JWT_SECRET
+        value: "simple-jwt-secret-for-testing-hostreamly-2024"
+
+static_sites:
+  # Frontend Static Site
+  - name: frontend
+    source_dir: /
+    github:
+      repo: jorgekof/hostreamly
+      branch: main
+      deploy_on_push: true
+    build_command: |
+      npm install
+      npm run build
+    output_dir: /dist
+    
+    # Variables de entorno para el frontend
+    envs:
+      - key: VITE_API_BASE_URL
+        value: "https://hostreamly-simple-xxxxx.ondigitalocean.app"
+      - key: VITE_APP_BASE_URL
+        value: ""
+      - key: VITE_WEBSOCKET_URL
+        value: ""
