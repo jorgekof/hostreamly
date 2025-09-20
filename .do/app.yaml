@@ -84,26 +84,28 @@ databases:
 # Static Sites Configuration
 static_sites:
   - name: hostreamly-frontend
-    source_dir: /
+    source_dir: /frontend
     github:
       repo: jorgekof/hostreamly
       branch: main
       deploy_on_push: true
-    build_command: npm run build
+    build_command: |
+      npm install
+      npm run build
     environment_slug: node-js
     envs:
       - key: NODE_ENV
         value: production
       - key: VITE_API_BASE_URL
-        value: ${APP_URL}/api
+        value: "/api"
       - key: VITE_WEBSOCKET_URL
-        value: ${APP_URL}
+        value: ""
       - key: VITE_APP_BASE_URL
-        value: ${APP_URL}
+        value: ""
       - key: VITE_BUNNY_CDN_URL
-        value: https://hostreamly.b-cdn.net
+        value: "https://hostreamly.b-cdn.net"
       - key: VITE_DO_SPACES_URL
-        value: https://hostreamly.fra1.digitaloceanspaces.com
+        value: "https://hostreamly.sfo3.digitaloceanspaces.com"
       - key: VITE_BUNNY_STREAM_API_KEY
         type: SECRET
         value: "REEMPLAZAR_CON_TU_BUNNY_API_KEY"
