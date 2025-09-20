@@ -16,7 +16,7 @@ import {
   Settings, 
   Wand2, 
   Clock, 
-  Grid3X3, 
+  LayoutGrid, 
   Palette, 
   Crop, 
   Zap, 

@@ -29,7 +29,7 @@ import {
   RefreshCw, 
   Search, 
   Filter, 
-  Grid3X3, 
+  LayoutGrid, 
   List, 
   ChevronUp, 
   ChevronDown, 
@@ -575,7 +575,7 @@ export const VideoChapters = () => {
                     size="sm"
                     onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                   >
-                    {viewMode === 'list' ? <Grid3X3 className="w-4 h-4" /> : <List className="w-4 h-4" />}
+                    {viewMode === 'list' ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
                   </Button>
                   <Button onClick={() => {
                     setEditingChapter({

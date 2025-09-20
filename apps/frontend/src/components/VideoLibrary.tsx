@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Search, 
   Filter, 
-  Grid3X3, 
+  LayoutGrid, 
   List, 
   Play, 
   Edit, 
@@ -347,7 +347,7 @@ const VideoLibrary: React.FC<VideoLibraryProps> = ({ onVideoSelect, onVideoEdit 
             size="sm"
             onClick={() => setViewMode('grid')}
           >
-            <Grid3X3 className="w-4 h-4" />
+            <LayoutGrid className="w-4 h-4" />
           </Button>
           <Button
             variant={viewMode === 'list' ? 'default' : 'outline'}
