@@ -6,7 +6,7 @@ services:
   github:
     repo: jorgekof/hostreamly
     branch: main
-  run_command: node server-simple.cjs
+  run_command: node server.js
   build_command: npm install
   environment_slug: node-js
   instance_count: 1
